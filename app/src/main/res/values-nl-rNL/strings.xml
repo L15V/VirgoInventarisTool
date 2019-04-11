@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VirgoInventarisTool</string>
+    <string name="cold_drinks">fris</string>
+    <string name="alcohol">alcohol</string>
+    <string name="food">eten</string>
+    <string name="merch">merchandise</string>
+    <string name="clothes">kleding</string>
+    <string name="send">verzenden</string>
+    <string name="other">anders</string>
+    <string name="out">uit</string>
+    <string name="In">uit</string>
+</resources>
