@@ -176,6 +176,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.mainScreen_alcoholButton:
                 items.add(new InvItem("Cola" , 5 ,15));
+                items.add(new InvItem("Sprite" , 5 ,15));
+                items.add(new InvItem("Fanta" , 5 ,15));
+                items.add(new InvItem("Hertog" , 5 ,15));
+                items.add(new InvItem("Maes" , 5 ,15));
+                items.add(new InvItem("Fuze green" , 5 ,15));
+                items.add(new InvItem("Fuze spark" , 5 ,15));
+                items.add(new InvItem("Cola" , 5 ,15));
+
+
                 invAdapter.update(items);
                 invAdapter.notifyDataSetChanged();
                 break;
