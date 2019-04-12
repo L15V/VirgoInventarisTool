@@ -9,5 +9,10 @@
     <string name="send">verzenden</string>
     <string name="other">anders</string>
     <string name="out">uit</string>
-    <string name="In">uit</string>
+    <string name="In">in</string>
+    <string name="acrate">Aantal kratten:</string>
+    <string name="abottles">Aantal flessen:</string>
+    <string name="crates">kratten</string>
+    <string name="bottles">flessen</string>
+    <string name="add">toevoegen</string>
 </resources>
