@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -18,19 +19,35 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.InvItemRViewAdapter;
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.ScreenSlideAdapter;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonColdDrinksParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
+import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private RequestQueue requestQueue;
+
+    private final String REQ_TAG = "VACTIVITY";
 
     private List<InvItem> items;
+
+    private boolean isDone = false;
 
     private int cratesToAdd = 0;
     private int bottlesToAdd = 0;
@@ -95,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.INTERNET);
         int permissionCheck2 = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_NETWORK_STATE);
+
+        requestQueue = RequestQueueSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
         items = new ArrayList<>();
         navigationButtons = new ArrayList<>();
@@ -198,14 +217,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 invAdapter.notifyDataSetChanged();
                 break;
             case R.id.mainScreen_clothesButton:
-                JsonColdDrinksParser jcdp = new JsonColdDrinksParser();
+                final JsonColdDrinksParser jcdp = new JsonColdDrinksParser(this);
                 try {
                     jcdp.getLatestDrinks();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if(jcdp.isDone()){
+                                jcdp.addCola(50);
+                            }else{
+                                while(!jcdp.isDone()){
+                                    if(jcdp.isDone()){
+                                        jcdp.addCola(50);
+                                        jcdp.addCola_zero(24);
+                                        jcdp.addFristi(2);
+                                        jcdp.subtracCassis(31);
+                                        jcdp.subtractFuze_green(12);
+                                        isDone = true;
+                                    }
+                                }
+                                if(!isDone){
+                                    jcdp.addCola(50);
+                                    jcdp.addCola_zero(24);
+                                    jcdp.addFristi(2);
+                                    jcdp.subtracCassis(31);
+                                    jcdp.subtractFuze_green(12);
+                                }
+                            }
+                            getJsonResponsePost(jcdp.getColdDrinksJSON());
+                            isDone = false;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
                 break;
         }
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 
     /**
@@ -342,5 +403,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         amountPopup.show();
+    }
+
+    protected void onStop(){
+        super.onStop();
+        if(requestQueue != null){
+            requestQueue.cancelAll(REQ_TAG);
+        }
+    }
+
+    public void getJsonResponsePost(JSONArray array){
+        String url = "http://192.168.178.26:8080/insertcolddrinks/";
+
+        JSONArray json;
+        json = array;
+        System.out.println("JSON Array: " + json);
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.POST, url, json, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.i(REQ_TAG, response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(REQ_TAG, "ERROR GETTING RESPONSE");
+            }
+        }){
+
+            @Override
+            public Map<String , String> getHeaders() throws AuthFailureError{
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", "My useragent");
+                return headers;
+            }
+        };
+        jsonObjectRequest.setTag(REQ_TAG);
+        requestQueue.add(jsonObjectRequest);
     }
 }
