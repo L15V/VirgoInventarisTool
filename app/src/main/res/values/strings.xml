@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">VirgoInventarisTool</string>
+    <string name="app_name">VirgoInventarisationTool</string>
+    <string name="cold_drinks">cold drinks</string>
+    <string name="alcohol">alcohol</string>
+    <string name="food">food</string>
+    <string name="merch">merch</string>
+    <string name="clothes">clothes</string>
+    <string name="send">send</string>
+    <string name="other">other</string>
+    <string name="In">in</string>
+    <string name="out">out</string>
+    <string name="acrate">amount of crates:</string>
+    <string name="abottles">Amount of bottles:</string>
+    <string name="crates">crates</string>
+    <string name="bottles">bottles</string>
+    <string name="add">add</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>
