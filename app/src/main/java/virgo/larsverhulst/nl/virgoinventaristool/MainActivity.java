@@ -1,14 +1,17 @@
 package virgo.larsverhulst.nl.virgoinventaristool;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -16,16 +19,36 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.InvItemRViewAdapter;
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.ScreenSlideAdapter;
+import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonAlcoholParser;
+import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonColdDrinksParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
+import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private RequestQueue requestQueue;
+
+    private final String REQ_TAG = "VACTIVITY";
 
     private List<InvItem> items;
+
+    private boolean isDone = false;
 
     private int cratesToAdd = 0;
     private int bottlesToAdd = 0;
@@ -85,6 +108,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET);
+        int permissionCheck2 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_NETWORK_STATE);
+
+        requestQueue = RequestQueueSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
         items = new ArrayList<>();
         navigationButtons = new ArrayList<>();
@@ -175,20 +205,141 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ShowPopup(v);
                 break;
             case R.id.mainScreen_alcoholButton:
-                items.add(new InvItem("Cola" , 5 ,15));
-                items.add(new InvItem("Sprite" , 5 ,15));
-                items.add(new InvItem("Fanta" , 5 ,15));
-                items.add(new InvItem("Hertog" , 5 ,15));
-                items.add(new InvItem("Maes" , 5 ,15));
-                items.add(new InvItem("Fuze green" , 5 ,15));
-                items.add(new InvItem("Fuze spark" , 5 ,15));
-                items.add(new InvItem("Cola" , 5 ,15));
-
+                items.add(new InvItem("Cola" , "cold_drink", 5 ,15));
+                items.add(new InvItem("Sprite" ,"cold_drink", 5 ,15));
+                items.add(new InvItem("Fanta" ,"cold_drink", 5 ,15));
+                items.add(new InvItem("Hertog" ,"cold_drink", 5 ,15));
+                items.add(new InvItem("Maes" ,"cold_drink", 5 ,15));
+                items.add(new InvItem("Fuze green" ,"cold_drink", 5 ,15));
+                items.add(new InvItem("Fuze spark" ,"cold_drink", 5 ,15));
+                items.add(new InvItem("Cola" , "cold_drink",5 ,15));
 
                 invAdapter.update(items);
                 invAdapter.notifyDataSetChanged();
                 break;
+            case R.id.mainScreen_clothesButton:
+                final JsonColdDrinksParser cd = new JsonColdDrinksParser(this);
+                final JsonAlcoholParser ad = new JsonAlcoholParser(this);
+                try {
+                    cd.getLatestDrinks();
+                    ad.getLatestDrinks();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if(cd.isDone() || ad.isDone()){
+                                cd.addCola(1);
+                                cd.addCola_zero(2);
+                                cd.addSprite(3);
+                                cd.addFuze_green(4);
+                                cd.addFuze_sparkling(5);
+                                cd.addFuze_blacktea(6);
+                                cd.addFanta(7);
+                                cd.addCassis(8);
+                                cd.addO2_geel(9);
+                                cd.addO2_rood(10);
+                                cd.addO2_groen(11);
+                                cd.addRedbull(12);
+                                cd.addFristi(13);
+                                cd.addChocomel(14);
+                                cd.addSpa_rood(15);
+
+                                ad.addHertog_jan(1);
+                                ad.addJupiler(2);
+                                ad.addLiefmans(3);
+                                ad.addLeffe_blond(4);
+                                ad.addPalm(5);
+                                ad.addHoegaarde(6);
+                                ad.addWitte_wijn(7);
+                                ad.addRode_wijn(8);
+                                ad.addBacardi(9);
+                                ad.addBacardi_razz(10);
+                            }else{
+                                while(!cd.isDone() || ad.isDone()){
+                                    if(cd.isDone() && ad.isDone()){
+
+                                        cd.addCola(1);
+                                        cd.addCola_zero(2);
+                                        cd.addSprite(3);
+                                        cd.addFuze_green(4);
+                                        cd.addFuze_sparkling(5);
+                                        cd.addFuze_blacktea(6);
+                                        cd.addFanta(7);
+                                        cd.addCassis(8);
+                                        cd.addO2_geel(9);
+                                        cd.addO2_rood(10);
+                                        cd.addO2_groen(11);
+                                        cd.addRedbull(12);
+                                        cd.addFristi(13);
+                                        cd.addChocomel(14);
+                                        cd.addSpa_rood(15);
+
+                                        ad.addHertog_jan(1);
+                                        ad.addJupiler(2);
+                                        ad.addLiefmans(3);
+                                        ad.addLeffe_blond(4);
+                                        ad.addPalm(5);
+                                        ad.addHoegaarde(6);
+                                        ad.addWitte_wijn(7);
+                                        ad.addRode_wijn(8);
+                                        ad.addBacardi(9);
+                                        ad.addBacardi_razz(10);
+
+                                        isDone = true;
+                                    }
+                                }
+                                if(!isDone){
+                                    cd.addCola(1);
+                                    cd.addCola_zero(2);
+                                    cd.addSprite(3);
+                                    cd.addFuze_green(4);
+                                    cd.addFuze_sparkling(5);
+                                    cd.addFuze_blacktea(6);
+                                    cd.addFanta(7);
+                                    cd.addCassis(8);
+                                    cd.addO2_geel(9);
+                                    cd.addO2_rood(10);
+                                    cd.addO2_groen(11);
+                                    cd.addRedbull(12);
+                                    cd.addFristi(13);
+                                    cd.addChocomel(14);
+                                    cd.addSpa_rood(15);
+
+                                    ad.addHertog_jan(1);
+                                    ad.addJupiler(2);
+                                    ad.addLiefmans(3);
+                                    ad.addLeffe_blond(4);
+                                    ad.addPalm(5);
+                                    ad.addHoegaarde(6);
+                                    ad.addWitte_wijn(7);
+                                    ad.addRode_wijn(8);
+                                    ad.addBacardi(9);
+                                    ad.addBacardi_razz(10);
+                                }
+                            }
+                            getJsonResponsePost(cd.getColdDrinksJSON(), "http://192.168.178.26:8080/insertcolddrinks/");
+                            getJsonResponsePost(ad.getAlcoholJSON(), "http://192.168.178.26:8080/insertalcohol");
+                            isDone = false;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+                break;
         }
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 
     /**
@@ -325,5 +476,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         amountPopup.show();
+    }
+
+    protected void onStop(){
+        super.onStop();
+        if(requestQueue != null){
+            requestQueue.cancelAll(REQ_TAG);
+        }
+    }
+
+    public void getJsonResponsePost(JSONArray array, String url){
+        url = url;
+
+        JSONArray json;
+        json = array;
+        System.out.println("JSON Array: " + json);
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.POST, url, json, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.i(REQ_TAG, response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(REQ_TAG, "ERROR GETTING RESPONSE");
+            }
+        }){
+
+            @Override
+            public Map<String , String> getHeaders() throws AuthFailureError{
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", "My useragent");
+                return headers;
+            }
+        };
+        jsonObjectRequest.setTag(REQ_TAG);
+        requestQueue.add(jsonObjectRequest);
     }
 }

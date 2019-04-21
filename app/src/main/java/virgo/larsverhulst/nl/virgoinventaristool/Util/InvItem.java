@@ -2,11 +2,13 @@ package virgo.larsverhulst.nl.virgoinventaristool.Util;
 
 public class InvItem {
     private String nameOfDrink;
+    private String kindOfDrink;
     private int crates;
     private int bottles;
 
-    public InvItem(String nameOfDrink, int crates, int bottles) {
+    public InvItem(String nameOfDrink, String kindOfDrink, int crates, int bottles) {
         this.nameOfDrink = nameOfDrink;
+        this.kindOfDrink = kindOfDrink;
         this.crates = crates;
         this.bottles = bottles;
     }
@@ -17,6 +19,14 @@ public class InvItem {
 
     public void setNameOfDrink(String nameOfDrink) {
         this.nameOfDrink = nameOfDrink;
+    }
+
+    public String getKindOfDrink() {
+        return kindOfDrink;
+    }
+
+    public void setKindOfDrink(String kindOfDrink) {
+        this.kindOfDrink = kindOfDrink;
     }
 
     public int getCrates() {
