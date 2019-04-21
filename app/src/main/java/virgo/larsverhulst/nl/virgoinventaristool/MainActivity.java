@@ -36,6 +36,7 @@ import java.util.Map;
 
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.InvItemRViewAdapter;
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.ScreenSlideAdapter;
+import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonAlcoholParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonColdDrinksParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
@@ -217,9 +218,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 invAdapter.notifyDataSetChanged();
                 break;
             case R.id.mainScreen_clothesButton:
-                final JsonColdDrinksParser jcdp = new JsonColdDrinksParser(this);
+                final JsonColdDrinksParser cd = new JsonColdDrinksParser(this);
+                final JsonAlcoholParser ad = new JsonAlcoholParser(this);
                 try {
-                    jcdp.getLatestDrinks();
+                    cd.getLatestDrinks();
+                    ad.getLatestDrinks();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -227,28 +230,98 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         try {
-                            if(jcdp.isDone()){
-                                jcdp.addCola(50);
+                            if(cd.isDone() || ad.isDone()){
+                                cd.addCola(1);
+                                cd.addCola_zero(2);
+                                cd.addSprite(3);
+                                cd.addFuze_green(4);
+                                cd.addFuze_sparkling(5);
+                                cd.addFuze_blacktea(6);
+                                cd.addFanta(7);
+                                cd.addCassis(8);
+                                cd.addO2_geel(9);
+                                cd.addO2_rood(10);
+                                cd.addO2_groen(11);
+                                cd.addRedbull(12);
+                                cd.addFristi(13);
+                                cd.addChocomel(14);
+                                cd.addSpa_rood(15);
+
+                                ad.addHertog_jan(1);
+                                ad.addJupiler(2);
+                                ad.addLiefmans(3);
+                                ad.addLeffe_blond(4);
+                                ad.addPalm(5);
+                                ad.addHoegaarde(6);
+                                ad.addWitte_wijn(7);
+                                ad.addRode_wijn(8);
+                                ad.addBacardi(9);
+                                ad.addBacardi_razz(10);
                             }else{
-                                while(!jcdp.isDone()){
-                                    if(jcdp.isDone()){
-                                        jcdp.addCola(50);
-                                        jcdp.addCola_zero(24);
-                                        jcdp.addFristi(2);
-                                        jcdp.subtracCassis(31);
-                                        jcdp.subtractFuze_green(12);
+                                while(!cd.isDone() || ad.isDone()){
+                                    if(cd.isDone() && ad.isDone()){
+
+                                        cd.addCola(1);
+                                        cd.addCola_zero(2);
+                                        cd.addSprite(3);
+                                        cd.addFuze_green(4);
+                                        cd.addFuze_sparkling(5);
+                                        cd.addFuze_blacktea(6);
+                                        cd.addFanta(7);
+                                        cd.addCassis(8);
+                                        cd.addO2_geel(9);
+                                        cd.addO2_rood(10);
+                                        cd.addO2_groen(11);
+                                        cd.addRedbull(12);
+                                        cd.addFristi(13);
+                                        cd.addChocomel(14);
+                                        cd.addSpa_rood(15);
+
+                                        ad.addHertog_jan(1);
+                                        ad.addJupiler(2);
+                                        ad.addLiefmans(3);
+                                        ad.addLeffe_blond(4);
+                                        ad.addPalm(5);
+                                        ad.addHoegaarde(6);
+                                        ad.addWitte_wijn(7);
+                                        ad.addRode_wijn(8);
+                                        ad.addBacardi(9);
+                                        ad.addBacardi_razz(10);
+
                                         isDone = true;
                                     }
                                 }
                                 if(!isDone){
-                                    jcdp.addCola(50);
-                                    jcdp.addCola_zero(24);
-                                    jcdp.addFristi(2);
-                                    jcdp.subtracCassis(31);
-                                    jcdp.subtractFuze_green(12);
+                                    cd.addCola(1);
+                                    cd.addCola_zero(2);
+                                    cd.addSprite(3);
+                                    cd.addFuze_green(4);
+                                    cd.addFuze_sparkling(5);
+                                    cd.addFuze_blacktea(6);
+                                    cd.addFanta(7);
+                                    cd.addCassis(8);
+                                    cd.addO2_geel(9);
+                                    cd.addO2_rood(10);
+                                    cd.addO2_groen(11);
+                                    cd.addRedbull(12);
+                                    cd.addFristi(13);
+                                    cd.addChocomel(14);
+                                    cd.addSpa_rood(15);
+
+                                    ad.addHertog_jan(1);
+                                    ad.addJupiler(2);
+                                    ad.addLiefmans(3);
+                                    ad.addLeffe_blond(4);
+                                    ad.addPalm(5);
+                                    ad.addHoegaarde(6);
+                                    ad.addWitte_wijn(7);
+                                    ad.addRode_wijn(8);
+                                    ad.addBacardi(9);
+                                    ad.addBacardi_razz(10);
                                 }
                             }
-                            getJsonResponsePost(jcdp.getColdDrinksJSON());
+                            getJsonResponsePost(cd.getColdDrinksJSON(), "http://192.168.178.26:8080/insertcolddrinks/");
+                            getJsonResponsePost(ad.getAlcoholJSON(), "http://192.168.178.26:8080/insertalcohol");
                             isDone = false;
 
                         } catch (JSONException e) {
@@ -412,8 +485,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void getJsonResponsePost(JSONArray array){
-        String url = "http://192.168.178.26:8080/insertcolddrinks/";
+    public void getJsonResponsePost(JSONArray array, String url){
+        url = url;
 
         JSONArray json;
         json = array;

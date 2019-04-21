@@ -307,7 +307,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
     /**
      * Returns the amount of fuzetea blacktea using SharedPreferences
      *
-     * @return amount cola
+     * @return amount fuze blacktea
      */
     public int getFuze_blacktea() {
         return prefs.getInt("fuze_blacktea", 0);
@@ -427,7 +427,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      *
      * @param amount - cassis to subtract
      */
-    public void subtracCassis(int amount) {
+    public void subtractCassis(int amount) {
         int oldDrink = prefs.getInt("cassis", 0);
         int newDrink = oldDrink - amount;
         if (newDrink < 0) {
