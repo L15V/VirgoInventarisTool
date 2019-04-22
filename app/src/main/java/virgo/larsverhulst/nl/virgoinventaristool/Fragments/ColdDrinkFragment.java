@@ -1,15 +1,53 @@
 package virgo.larsverhulst.nl.virgoinventaristool.Fragments;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import org.json.JSONException;
+
+import virgo.larsverhulst.nl.virgoinventaristool.MainActivity;
+import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonAlcoholParser;
+import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonColdDrinksParser;
 import virgo.larsverhulst.nl.virgoinventaristool.R;
+import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 
 
-public class ColdDrinkFragment extends Fragment {
+public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
+    private Button colaButton;
+    private Button colaZeroButton;
+    private Button spriteButton;
+    private Button fantaButton;
+    private Button cassisButton;
+    private Button redbullButon;
+    private Button fuzeGreenButton;
+    private Button fuzeSparklingButton;
+    private Button fuzeBlackteaButton;
+    private Button o2GeelButton;
+    private Button o2RoodButton;
+    private Button o2GroenButton;
+    private Button fristiButton;
+    private Button chocomelButton;
+    private Button spaRoodButton;
+
+    private Context context;
+    private MainActivity activity;
+
+    Dialog amountPopup;
+
+
+    private int cratesToAdd = 0;
+    private int bottlesToAdd = 0;
+
+    private String kindofDrink = "cold_drink";
 
 
     @Override
@@ -22,9 +60,162 @@ public class ColdDrinkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cold_drink, container, false);
+        View v = inflater.inflate(R.layout.fragment_cold_drink, container, false);
+        activity = (MainActivity) getActivity();
+
+        amountPopup = new Dialog(v.getContext());
+
+        colaButton = v.findViewById(R.id.cold_drinks_cola);
+        colaZeroButton = v.findViewById(R.id.cold_drinks_colaZero);
+        spriteButton = v.findViewById(R.id.cold_drinks_sprite);
+        fantaButton = v.findViewById(R.id.cold_drinks_fanta);
+        cassisButton = v.findViewById(R.id.cold_drinks_cassis);
+        redbullButon = v.findViewById(R.id.cold_drinks_redbull);
+        fuzeGreenButton = v.findViewById(R.id.cold_drinks_fuze_green);
+        fuzeSparklingButton = v.findViewById(R.id.cold_drinks_fuze_sparkling);
+        fuzeBlackteaButton = v.findViewById(R.id.cold_drinks_fuze_blacktea);
+
+
+        colaButton.setOnClickListener(this);
+        colaZeroButton.setOnClickListener(this);
+
+        return v;
+    }
+
+    @Override
+    public void onClick(View v){
+        switch(v.getId()){
+
+            case R.id.cold_drinks_cola:
+                ShowPopup("cola" , kindofDrink, "Cola");
+                break;
+            case R.id.cold_drinks_colaZero:
+                ShowPopup("cola_zero" , kindofDrink, "Cola Zero");
+                break;
+        }
     }
 
 
+
+    public void ShowPopup(final String drinkName, final String kindOfDrink, String title){
+        final TextView titleTextView;
+
+        final TextView amountCrates;
+        final TextView amountBottles;
+
+        Button crate1;
+        Button crate5;
+        Button crate10;
+        Button crate20;
+
+        Button bottle1;
+        Button bottle5;
+        Button bottle10;
+        Button bottle20;
+
+        Button addButton;
+
+        amountPopup.setContentView(R.layout.custom_popup);
+
+        titleTextView = amountPopup.findViewById(R.id.customPopup_Drinkname);
+        titleTextView.setText(title);
+
+        amountCrates = amountPopup.findViewById(R.id.customPopup_amountOfCrates);
+        amountCrates.setText(Integer.toString(cratesToAdd));
+        amountBottles = amountPopup.findViewById(R.id.customPopup_amountOfBottles);
+        amountBottles.setText(Integer.toString(bottlesToAdd));
+
+        crate1 = amountPopup.findViewById(R.id.customPopup_cr1);
+        crate5 = amountPopup.findViewById(R.id.customPopup_cr5);
+        crate10 = amountPopup.findViewById(R.id.customPopup_cr10);
+        crate20 = amountPopup.findViewById(R.id.customPopup_cr20);
+
+        bottle1 = amountPopup.findViewById(R.id.customPopup_bo1);
+        bottle5 = amountPopup.findViewById(R.id.customPopup_bo5);
+        bottle10 = amountPopup.findViewById(R.id.customPopup_bo10);
+        bottle20 = amountPopup.findViewById(R.id.customPopup_bo20);
+
+        addButton = amountPopup.findViewById(R.id.customPopup_addButton);
+
+        crate1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd += 1;
+                amountCrates.setText(Integer.toString(cratesToAdd));
+            }
+        });
+        crate5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd += 5;
+                amountCrates.setText(Integer.toString(cratesToAdd));
+            }
+        });
+        crate10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd += 10;
+                amountCrates.setText(Integer.toString(cratesToAdd));
+            }
+        });
+        crate20.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd += 20;
+                amountCrates.setText(Integer.toString(cratesToAdd));
+            }
+        });
+
+        bottle1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd += 1;
+                amountBottles.setText(Integer.toString(bottlesToAdd));
+            }
+        });
+        bottle5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd += 5;
+                amountBottles.setText(Integer.toString(bottlesToAdd));
+            }
+        });
+        bottle10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd += 10;
+                amountBottles.setText(Integer.toString(bottlesToAdd));
+            }
+        });
+        bottle20.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd += 20;
+                amountBottles.setText(Integer.toString(bottlesToAdd));
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InvItem item = new InvItem(drinkName, kindOfDrink , cratesToAdd , bottlesToAdd);
+                activity.addItemtoList(item);
+                bottlesToAdd = 0;
+                cratesToAdd = 0;
+                amountPopup.dismiss();
+
+            }
+        });
+
+        amountPopup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                bottlesToAdd = 0;
+                cratesToAdd = 0;
+            }
+        });
+
+        amountPopup.show();
+    }
 
 }
