@@ -74,10 +74,28 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
         fuzeGreenButton = v.findViewById(R.id.cold_drinks_fuze_green);
         fuzeSparklingButton = v.findViewById(R.id.cold_drinks_fuze_sparkling);
         fuzeBlackteaButton = v.findViewById(R.id.cold_drinks_fuze_blacktea);
-
+        o2GeelButton = v.findViewById(R.id.cold_drinks_o2Geel);
+        o2RoodButton = v.findViewById(R.id.cold_drinks_o2Rood);
+        o2GroenButton = v.findViewById(R.id.cold_drinks_o2Groen);
+        fristiButton = v.findViewById(R.id.cold_drinks_fristi);
+        chocomelButton = v.findViewById(R.id.cold_drinks_chocomel);
+        spaRoodButton = v.findViewById(R.id.cold_drinks_spaRood);
 
         colaButton.setOnClickListener(this);
         colaZeroButton.setOnClickListener(this);
+        spriteButton.setOnClickListener(this);
+        fantaButton.setOnClickListener(this);
+        cassisButton.setOnClickListener(this);
+        redbullButon.setOnClickListener(this);
+        fuzeGreenButton.setOnClickListener(this);
+        fuzeSparklingButton.setOnClickListener(this);
+        fuzeBlackteaButton.setOnClickListener(this);
+        o2GeelButton.setOnClickListener(this);
+        o2RoodButton.setOnClickListener(this);
+        o2GroenButton.setOnClickListener(this);
+        fristiButton.setOnClickListener(this);
+        chocomelButton.setOnClickListener(this);
+        spaRoodButton.setOnClickListener(this);
 
         return v;
     }
@@ -91,6 +109,45 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.cold_drinks_colaZero:
                 ShowPopup("cola_zero" , kindofDrink, "Cola Zero");
+                break;
+            case R.id.cold_drinks_sprite:
+                ShowPopup("sprite" , kindofDrink, "Sprite");
+                break;
+            case R.id.cold_drinks_fanta:
+                ShowPopup("fanta" , kindofDrink, "Famta");
+                break;
+            case R.id.cold_drinks_cassis:
+                ShowPopup("cassis", kindofDrink, "Cassis");
+                break;
+            case R.id.cold_drinks_redbull:
+                ShowPopup("redbull", kindofDrink, "Redbull");
+                break;
+            case R.id.cold_drinks_fuze_green:
+                ShowPopup("fuze_green", kindofDrink, "Fuzetea green");
+                break;
+            case R.id.cold_drinks_fuze_sparkling:
+                ShowPopup("fuze_sparkling", kindofDrink, "Fuzetea sparkling");
+                break;
+            case R.id.cold_drinks_fuze_blacktea:
+                ShowPopup("fuze_blacktea", kindofDrink, "Fuzetea blacktea");
+                break;
+            case R.id.cold_drinks_o2Geel:
+                ShowPopup("o2_geel", kindofDrink, "O2 geel");
+                break;
+            case R.id.cold_drinks_o2Rood:
+                ShowPopup("o2_rood" , kindofDrink, "O2 rood");
+                break;
+            case R.id.cold_drinks_o2Groen:
+                ShowPopup("o2_groen", kindofDrink, "O2 groen");
+                break;
+            case R.id.cold_drinks_fristi:
+                ShowPopup("fristi", kindofDrink, "Fristi");
+                break;
+            case R.id.cold_drinks_chocomel:
+                ShowPopup("chocomel", kindofDrink, "Chocomel");
+                break;
+            case R.id.cold_drinks_spaRood:
+                ShowPopup("spa_rood", kindofDrink, "Spa rood");
                 break;
         }
     }

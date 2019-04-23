@@ -16,6 +16,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="cola"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +31,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="cola_zero"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +46,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="sprite"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent" />
@@ -76,6 +82,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="fuzetea Green"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +98,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="fuzetea sparkling"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -104,6 +114,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="fuzetea blacktea"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
@@ -118,6 +130,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="Fanta"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_cola" />
@@ -131,6 +145,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="cassis"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_colaZero" />
@@ -144,6 +160,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="redbull"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_sprite" />
@@ -157,6 +175,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="O2 Geel"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_fuze_green" />
@@ -170,6 +190,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="O2 Rood"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_fuze_sparkling" />
@@ -183,12 +205,14 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="O2 Groen"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_fuze_blacktea" />
 
     <Button
-        android:id="@+id/cold_drink_fristi"
+        android:id="@+id/cold_drinks_fristi"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -196,12 +220,14 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="fristi"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_o2Geel" />
 
     <Button
-        android:id="@+id/cold_drink_chocomel"
+        android:id="@+id/cold_drinks_chocomel"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -209,12 +235,14 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="chocomel"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_o2Rood" />
 
     <Button
-        android:id="@+id/cold_drink_spaRood"
+        android:id="@+id/cold_drinks_spaRood"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -222,6 +250,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:text="Spa Rood"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/cold_drinks_o2Groen" />

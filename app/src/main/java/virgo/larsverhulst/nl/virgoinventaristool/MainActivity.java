@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -42,6 +43,9 @@ import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private JsonAlcoholParser alcoholParser;
+    private JsonColdDrinksParser coldDrinksParser;
+
     private RequestQueue requestQueue;
 
     private final String REQ_TAG = "VACTIVITY";
@@ -52,21 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int cratesToAdd = 0;
     private int bottlesToAdd = 0;
-
-    private TextView amountCrates;
-    private TextView amountBottles;
-
-    private Button crate1;
-    private Button crate5;
-    private Button crate10;
-    private Button crate20;
-
-    private Button bottle1;
-    private Button bottle5;
-    private Button bottle10;
-    private Button bottle20;
-
-    private Button addButton;
 
 
     /**
@@ -114,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int permissionCheck2 = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_NETWORK_STATE);
 
+        this.alcoholParser = new JsonAlcoholParser(this);
+        this.coldDrinksParser = new JsonColdDrinksParser(this);
+
         requestQueue = RequestQueueSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
         items = new ArrayList<>();
@@ -140,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
          * Assignments to the layout items
          */
+        inButton = findViewById(R.id.mainScreen_inButton);
+        inButton.setOnClickListener(this);
 
         coldDrinkButton = findViewById(R.id.mainScreen_coldDrinkButton);
         alcoholButton = findViewById(R.id.mainScreen_alcoholButton);
@@ -211,6 +205,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.mainScreen_clothesButton:
 
+                break;
+            case R.id.mainScreen_inButton:
+                addItemsInDb();
                 break;
         }
     }
@@ -421,5 +418,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         items.get(index).setCrates(crates);
         items.get(index).setBottles(bottles);
+    }
+
+    public void addItemsInDb() {
+        try {
+            coldDrinksParser.getLatestDrinks();
+            alcoholParser.getLatestDrinks();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for (InvItem i : items) {
+            if (i.getKindOfDrink().equals("cold_drink")) {
+                switch (i.getNameOfDrink()) {
+                    case "cola":
+                        coldDrinksParser.addCola(i.getTotalToAdd());
+                        break;
+                    case "cola_zero":
+                        coldDrinksParser.addCola_zero(i.getTotalToAdd());
+                        break;
+                    case "sprite":
+                        coldDrinksParser.addSprite(i.getTotalToAdd());
+                        break;
+                    case "fanta":
+                        coldDrinksParser.addFanta(i.getTotalToAdd());
+                        break;
+                    case "cassis":
+                        coldDrinksParser.addCassis(i.getTotalToAdd());
+                        break;
+                    case "redbull":
+                        coldDrinksParser.addRedbull(i.getTotalToAdd());
+                        break;
+                    case "fuze_green" :
+                        coldDrinksParser.addFuze_green(i.getTotalToAdd());
+                        break;
+                    case "fuze_sparkling":
+                        coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
+                        break;
+                    case "fuze_blacktea":
+                        coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
+                        break;
+                    case "o2_geel":
+                        coldDrinksParser.addO2_geel(i.getTotalToAdd());
+                        break;
+                    case "o2_rood":
+                        coldDrinksParser.addO2_rood(i.getTotalToAdd());
+                        break;
+                    case "o2_groen":
+                        coldDrinksParser.addO2_groen(i.getTotalToAdd());
+                        break;
+                    case "fristi":
+                        coldDrinksParser.addFristi(i.getTotalToAdd());
+                        break;
+                    case "chocomel":
+                        coldDrinksParser.addChocomel(i.getTotalToAdd());
+                        break;
+                    case "spa_rood":
+                        coldDrinksParser.addSpa_rood(i.getTotalToAdd());
+                        break;
+                }
+            }
+        }
+
+        try {
+            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), "http://192.168.0.19:8080/insertcolddrinks/");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
