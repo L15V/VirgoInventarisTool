@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -42,6 +43,7 @@ import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
     private RequestQueue requestQueue;
 
     private final String REQ_TAG = "VACTIVITY";
@@ -52,21 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int cratesToAdd = 0;
     private int bottlesToAdd = 0;
-
-    private TextView amountCrates;
-    private TextView amountBottles;
-
-    private Button crate1;
-    private Button crate5;
-    private Button crate10;
-    private Button crate20;
-
-    private Button bottle1;
-    private Button bottle5;
-    private Button bottle10;
-    private Button bottle20;
-
-    private Button addButton;
 
 
     /**
@@ -122,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
         getSupportActionBar().hide(); //hide the title bar
 
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
             setContentView(R.layout.activity_main);
-        }else{
+        } else {
             setContentView(R.layout.activity_main_old_android);
         }
 
@@ -140,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
          * Assignments to the layout items
          */
+        inButton = findViewById(R.id.mainScreen_inButton);
+        inButton.setOnClickListener(this);
 
         coldDrinkButton = findViewById(R.id.mainScreen_coldDrinkButton);
         alcoholButton = findViewById(R.id.mainScreen_alcoholButton);
@@ -155,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationButtons.add(clothesButton);
         navigationButtons.add(otherButton);
 
-        for(int i = 0; i < navigationButtons.size() ; i++){
+        for (int i = 0; i < navigationButtons.size(); i++) {
             navigationButtons.get(i).setOnClickListener(this);
         }
 
@@ -178,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPageSelected(int index) {
-                switch(index){
+                switch (index) {
                     case 0:
                         setButtonEnableColor(coldDrinkButton);
                         break;
@@ -198,138 +187,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v){
-        switch(v.getId()){
+    public void onClick(View v) {
+        switch (v.getId()) {
 
             case R.id.mainScreen_coldDrinkButton:
-                ShowPopup(v);
+                viewPager.setCurrentItem(0);
+                setButtonEnableColor(coldDrinkButton);
                 break;
             case R.id.mainScreen_alcoholButton:
-                items.add(new InvItem("Cola" , "cold_drink", 5 ,15));
-                items.add(new InvItem("Sprite" ,"cold_drink", 5 ,15));
-                items.add(new InvItem("Fanta" ,"cold_drink", 5 ,15));
-                items.add(new InvItem("Hertog" ,"cold_drink", 5 ,15));
-                items.add(new InvItem("Maes" ,"cold_drink", 5 ,15));
-                items.add(new InvItem("Fuze green" ,"cold_drink", 5 ,15));
-                items.add(new InvItem("Fuze spark" ,"cold_drink", 5 ,15));
-                items.add(new InvItem("Cola" , "cold_drink",5 ,15));
-
-                invAdapter.update(items);
-                invAdapter.notifyDataSetChanged();
+                viewPager.setCurrentItem(1);
+                setButtonEnableColor(alcoholButton);
                 break;
             case R.id.mainScreen_clothesButton:
-                final JsonColdDrinksParser cd = new JsonColdDrinksParser(this);
-                final JsonAlcoholParser ad = new JsonAlcoholParser(this);
-                try {
-                    cd.getLatestDrinks();
-                    ad.getLatestDrinks();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if(cd.isDone() || ad.isDone()){
-                                cd.addCola(1);
-                                cd.addCola_zero(2);
-                                cd.addSprite(3);
-                                cd.addFuze_green(4);
-                                cd.addFuze_sparkling(5);
-                                cd.addFuze_blacktea(6);
-                                cd.addFanta(7);
-                                cd.addCassis(8);
-                                cd.addO2_geel(9);
-                                cd.addO2_rood(10);
-                                cd.addO2_groen(11);
-                                cd.addRedbull(12);
-                                cd.addFristi(13);
-                                cd.addChocomel(14);
-                                cd.addSpa_rood(15);
 
-                                ad.addHertog_jan(1);
-                                ad.addJupiler(2);
-                                ad.addLiefmans(3);
-                                ad.addLeffe_blond(4);
-                                ad.addPalm(5);
-                                ad.addHoegaarde(6);
-                                ad.addWitte_wijn(7);
-                                ad.addRode_wijn(8);
-                                ad.addBacardi(9);
-                                ad.addBacardi_razz(10);
-                            }else{
-                                while(!cd.isDone() || ad.isDone()){
-                                    if(cd.isDone() && ad.isDone()){
-
-                                        cd.addCola(1);
-                                        cd.addCola_zero(2);
-                                        cd.addSprite(3);
-                                        cd.addFuze_green(4);
-                                        cd.addFuze_sparkling(5);
-                                        cd.addFuze_blacktea(6);
-                                        cd.addFanta(7);
-                                        cd.addCassis(8);
-                                        cd.addO2_geel(9);
-                                        cd.addO2_rood(10);
-                                        cd.addO2_groen(11);
-                                        cd.addRedbull(12);
-                                        cd.addFristi(13);
-                                        cd.addChocomel(14);
-                                        cd.addSpa_rood(15);
-
-                                        ad.addHertog_jan(1);
-                                        ad.addJupiler(2);
-                                        ad.addLiefmans(3);
-                                        ad.addLeffe_blond(4);
-                                        ad.addPalm(5);
-                                        ad.addHoegaarde(6);
-                                        ad.addWitte_wijn(7);
-                                        ad.addRode_wijn(8);
-                                        ad.addBacardi(9);
-                                        ad.addBacardi_razz(10);
-
-                                        isDone = true;
-                                    }
-                                }
-                                if(!isDone){
-                                    cd.addCola(1);
-                                    cd.addCola_zero(2);
-                                    cd.addSprite(3);
-                                    cd.addFuze_green(4);
-                                    cd.addFuze_sparkling(5);
-                                    cd.addFuze_blacktea(6);
-                                    cd.addFanta(7);
-                                    cd.addCassis(8);
-                                    cd.addO2_geel(9);
-                                    cd.addO2_rood(10);
-                                    cd.addO2_groen(11);
-                                    cd.addRedbull(12);
-                                    cd.addFristi(13);
-                                    cd.addChocomel(14);
-                                    cd.addSpa_rood(15);
-
-                                    ad.addHertog_jan(1);
-                                    ad.addJupiler(2);
-                                    ad.addLiefmans(3);
-                                    ad.addLeffe_blond(4);
-                                    ad.addPalm(5);
-                                    ad.addHoegaarde(6);
-                                    ad.addWitte_wijn(7);
-                                    ad.addRode_wijn(8);
-                                    ad.addBacardi(9);
-                                    ad.addBacardi_razz(10);
-                                }
-                            }
-                            getJsonResponsePost(cd.getColdDrinksJSON(), "http://192.168.178.26:8080/insertcolddrinks/");
-                            getJsonResponsePost(ad.getAlcoholJSON(), "http://192.168.178.26:8080/insertalcohol");
-                            isDone = false;
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-
+                break;
+            case R.id.mainScreen_inButton:
+                addItemsInDb();
                 break;
         }
     }
@@ -344,14 +217,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Method to change the enable collor from a selected button.
-     * @param b  button to change in color
+     *
+     * @param b button to change in color
      */
 
-    public void setButtonEnableColor(Button b){
+    public void setButtonEnableColor(Button b) {
         allButtonDefaultColor();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             b.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.DarkBlue)));
-        }else{
+        } else {
             b.setBackgroundColor(getResources().getColor(R.color.DarkBlue));
         }
         b.setTextColor(getResources().getColor(R.color.white));
@@ -361,15 +235,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Method to set all the buttons to a light blue background
      */
-    public void allButtonDefaultColor(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+    public void allButtonDefaultColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             coldDrinkButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightBlue)));
             alcoholButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightBlue)));
             foodButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightBlue)));
             merchButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightBlue)));
             clothesButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightBlue)));
             otherButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightBlue)));
-        }else{
+        } else {
             coldDrinkButton.setBackgroundColor(getResources().getColor(R.color.LightBlue));
             alcoholButton.setBackgroundColor(getResources().getColor(R.color.LightBlue));
             foodButton.setBackgroundColor(getResources().getColor(R.color.LightBlue));
@@ -379,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void ShowPopup(View v){
+    public void ShowPopup(View v) {
 
         final TextView amountCrates;
         final TextView amountBottles;
@@ -397,7 +271,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button addButton;
 
         amountPopup.setContentView(R.layout.custom_popup);
-
 
 
         amountCrates = amountPopup.findViewById(R.id.customPopup_amountOfCrates);
@@ -478,14 +351,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         amountPopup.show();
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
-        if(requestQueue != null){
+        if (requestQueue != null) {
             requestQueue.cancelAll(REQ_TAG);
         }
     }
 
-    public void getJsonResponsePost(JSONArray array, String url){
+    public void getJsonResponsePost(JSONArray array, String url) {
         url = url;
 
         JSONArray json;
@@ -501,10 +374,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onErrorResponse(VolleyError error) {
                 Log.i(REQ_TAG, "ERROR GETTING RESPONSE");
             }
-        }){
+        }) {
 
             @Override
-            public Map<String , String> getHeaders() throws AuthFailureError{
+            public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", "My useragent");
@@ -513,5 +386,102 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         jsonObjectRequest.setTag(REQ_TAG);
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public List<InvItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<InvItem> items) {
+        this.items = items;
+    }
+
+    public void addItemtoList(InvItem item) {
+        items.add(item);
+        invAdapter.update(items);
+        invAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Edit a item from the list
+     *
+     * @param index   - the index of the item you want to edit.
+     * @param crates  - new crates value.
+     * @param bottles - new bottles value.
+     */
+    public void editListItem(int index, int crates, int bottles) {
+
+        items.get(index).setCrates(crates);
+        items.get(index).setBottles(bottles);
+    }
+
+    public void addItemsInDb() {
+        JsonAlcoholParser alcoholParser = new JsonAlcoholParser(this);
+        JsonColdDrinksParser coldDrinksParser = new JsonColdDrinksParser(this);
+        try {
+            coldDrinksParser.getLatestDrinks();
+            alcoholParser.getLatestDrinks();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for (InvItem i : items) {
+            if (i.getKindOfDrink().equals("cold_drink")) {
+                switch (i.getNameOfDrink()) {
+                    case "cola":
+                        coldDrinksParser.addCola(i.getTotalToAdd());
+                        break;
+                    case "cola_zero":
+                        coldDrinksParser.addCola_zero(i.getTotalToAdd());
+                        break;
+                    case "sprite":
+                        coldDrinksParser.addSprite(i.getTotalToAdd());
+                        break;
+                    case "fanta":
+                        coldDrinksParser.addFanta(i.getTotalToAdd());
+                        break;
+                    case "cassis":
+                        coldDrinksParser.addCassis(i.getTotalToAdd());
+                        break;
+                    case "redbull":
+                        coldDrinksParser.addRedbull(i.getTotalToAdd());
+                        break;
+                    case "fuze_green" :
+                        coldDrinksParser.addFuze_green(i.getTotalToAdd());
+                        break;
+                    case "fuze_sparkling":
+                        coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
+                        break;
+                    case "fuze_blacktea":
+                        coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
+                        break;
+                    case "o2_geel":
+                        coldDrinksParser.addO2_geel(i.getTotalToAdd());
+                        break;
+                    case "o2_rood":
+                        coldDrinksParser.addO2_rood(i.getTotalToAdd());
+                        break;
+                    case "o2_groen":
+                        coldDrinksParser.addO2_groen(i.getTotalToAdd());
+                        break;
+                    case "fristi":
+                        coldDrinksParser.addFristi(i.getTotalToAdd());
+                        break;
+                    case "chocomel":
+                        coldDrinksParser.addChocomel(i.getTotalToAdd());
+                        break;
+                    case "spa_rood":
+                        coldDrinksParser.addSpa_rood(i.getTotalToAdd());
+                        break;
+                }
+            }
+        }
+
+        try {
+            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), "http://192.168.0.19:8080/insertcolddrinks/");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        items.clear();
     }
 }

@@ -1,5 +1,6 @@
 package virgo.larsverhulst.nl.virgoinventaristool.Adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,8 +11,11 @@ import virgo.larsverhulst.nl.virgoinventaristool.Fragments.ColdDrinkFragment;
 public class ScreenSlideAdapter extends FragmentPagerAdapter {
     private final int TOTAL_ITEMS_IN_PAGER = 2;
 
+    private Context context;
+
     public ScreenSlideAdapter(FragmentManager fm){
         super(fm);
+        this.context = context;
     }
 
     @Override
