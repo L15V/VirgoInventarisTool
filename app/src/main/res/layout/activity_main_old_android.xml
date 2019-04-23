@@ -15,13 +15,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/mainScreen_inButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_splitter"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/mainScreen_splitter2" />
 
     <!--
         # splitters for make a line between elements
@@ -50,7 +49,7 @@
         android:background="@color/VirgoBlue"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/mainScreen_splitter"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -81,6 +80,7 @@
         android:layout_height="0dp"
         android:background="@color/LightBlue"
         android:text="@string/cold_drinks"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/mainScreen_splitter2"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,6 +93,7 @@
         android:layout_marginStart="8dp"
         android:background="@color/LightBlue"
         android:text="@string/alcohol"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/mainScreen_splitter2"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_coldDrinkButton"
@@ -105,6 +106,7 @@
         android:layout_marginStart="8dp"
         android:background="@color/LightBlue"
         android:text="@string/food"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/mainScreen_splitter2"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_alcoholButton"
@@ -117,6 +119,7 @@
         android:background="@color/LightBlue"
         android:layout_marginStart="8dp"
         android:text="@string/merch"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/mainScreen_splitter2"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_foodButton"
@@ -129,6 +132,7 @@
         android:background="@color/LightBlue"
         android:layout_marginStart="8dp"
         android:text="@string/clothes"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/mainScreen_merchButton"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_merchButton"
@@ -142,6 +146,7 @@
         android:layout_marginEnd="8dp"
         android:background="@color/LightBlue"
         android:text="@string/other"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/mainScreen_merchButton"
         app:layout_constraintEnd_toStartOf="@+id/mainScreen_splitter"
@@ -160,6 +165,7 @@
         android:layout_marginBottom="8dp"
         android:background="@color/LightBlue"
         android:text="@string/In"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_splitter" />
@@ -173,9 +179,49 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/out"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_inButton" />
+
+    <ImageButton
+        android:id="@+id/mainScreen_fullscreen"
+        android:layout_width="47dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/VirgoBlue"
+        app:layout_constraintBottom_toBottomOf="@+id/mainScreen_clothesButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_fullscreem" />
+
+    <ImageButton
+        android:id="@+id/mainScreen_settings"
+        android:layout_width="47dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/VirgoBlue"
+        app:layout_constraintBottom_toBottomOf="@+id/mainScreen_clothesButton"
+        app:layout_constraintEnd_toStartOf="@+id/mainScreen_fullscreen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_settings" />
+
+    <ImageButton
+        android:id="@+id/mainScreen_language"
+        android:layout_width="47dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/VirgoBlue"
+        app:layout_constraintBottom_toTopOf="@+id/mainScreen_splitter2"
+        app:layout_constraintEnd_toStartOf="@+id/mainScreen_settings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_language" />
 
 
 </android.support.constraint.ConstraintLayout>

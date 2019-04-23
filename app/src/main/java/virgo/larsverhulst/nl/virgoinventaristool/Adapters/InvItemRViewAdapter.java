@@ -54,7 +54,7 @@ public class InvItemRViewAdapter extends RecyclerView.Adapter<InvItemRViewAdapte
         InvItem item = invItems.get(position);
 
         holder.title.setText(item.getNameOfDrink());
-        holder.amountCrates.setText(Integer.toString(item.getBottles()));
+        holder.amountCrates.setText(Integer.toString(item.getCrates()));
         holder.amountBottles.setText(Integer.toString(item.getBottles()));
     }
 

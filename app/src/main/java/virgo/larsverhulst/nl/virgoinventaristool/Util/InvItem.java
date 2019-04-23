@@ -44,4 +44,10 @@ public class InvItem {
     public void setBottles(int bottles) {
         this.bottles = bottles;
     }
+
+    public int getTotalToAdd(){
+        int total = 0;
+        total = ((crates*24)+bottles);
+        return  total;
+    }
 }
