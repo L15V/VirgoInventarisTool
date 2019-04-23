@@ -43,8 +43,6 @@ import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private JsonAlcoholParser alcoholParser;
-    private JsonColdDrinksParser coldDrinksParser;
 
     private RequestQueue requestQueue;
 
@@ -102,9 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.INTERNET);
         int permissionCheck2 = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_NETWORK_STATE);
-
-        this.alcoholParser = new JsonAlcoholParser(this);
-        this.coldDrinksParser = new JsonColdDrinksParser(this);
 
         requestQueue = RequestQueueSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
@@ -421,6 +416,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void addItemsInDb() {
+        JsonAlcoholParser alcoholParser = new JsonAlcoholParser(this);
+        JsonColdDrinksParser coldDrinksParser = new JsonColdDrinksParser(this);
         try {
             coldDrinksParser.getLatestDrinks();
             alcoholParser.getLatestDrinks();
@@ -485,5 +482,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        items.clear();
     }
 }

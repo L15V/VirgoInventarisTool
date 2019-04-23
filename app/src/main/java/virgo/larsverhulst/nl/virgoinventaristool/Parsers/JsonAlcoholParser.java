@@ -561,7 +561,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
     public int getLatestDrinks() throws JSONException {
         int succes = 0;
 
-        this.execute("http://192.168.178.26:8080/getlatestalcoholdrinks");
+        this.execute("http://192.168.0.19:8080/getlatestalcoholdrinks");
         if (this.getStatus() == Status.FINISHED) {
             succes = 1;
         }
