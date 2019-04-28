@@ -161,14 +161,22 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
         final TextView amountBottles;
 
         Button crate1;
+        Button crateMin1;
         Button crate5;
+        Button crateMin5;
         Button crate10;
+        Button crateMin10;
         Button crate20;
+        Button crateMin20;
 
         Button bottle1;
+        Button bottleMin1;
         Button bottle5;
+        Button bottleMin5;
         Button bottle10;
+        Button bottleMin10;
         Button bottle20;
+        Button bottleMin20;
 
         Button addButton;
 
@@ -183,14 +191,22 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
         amountBottles.setText(Integer.toString(bottlesToAdd));
 
         crate1 = amountPopup.findViewById(R.id.customPopup_cr1);
+        crateMin1 = amountPopup.findViewById(R.id.customPopup_crM1);
         crate5 = amountPopup.findViewById(R.id.customPopup_cr5);
+        crateMin5 = amountPopup.findViewById(R.id.customPopup_crM5);
         crate10 = amountPopup.findViewById(R.id.customPopup_cr10);
+        crateMin10 = amountPopup.findViewById(R.id.customPopup_crM10);
         crate20 = amountPopup.findViewById(R.id.customPopup_cr20);
+        crateMin20 = amountPopup.findViewById(R.id.customPopup_crM20);
 
         bottle1 = amountPopup.findViewById(R.id.customPopup_bo1);
+        bottleMin1 = amountPopup.findViewById(R.id.customPopup_boM1);
         bottle5 = amountPopup.findViewById(R.id.customPopup_bo5);
+        bottleMin5 = amountPopup.findViewById(R.id.customPopup_boM5);
         bottle10 = amountPopup.findViewById(R.id.customPopup_bo10);
+        bottleMin10 = amountPopup.findViewById(R.id.customPopup_boM10);
         bottle20 = amountPopup.findViewById(R.id.customPopup_bo20);
+        bottleMin20 = amountPopup.findViewById(R.id.customPopup_boM20);
 
         addButton = amountPopup.findViewById(R.id.customPopup_addButton);
 
@@ -201,11 +217,31 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 amountCrates.setText(Integer.toString(cratesToAdd));
             }
         });
+        crateMin1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd -= 1;
+                if(cratesToAdd < 0){
+                    cratesToAdd = 0;
+                    amountCrates.setText(Integer.toString(cratesToAdd));
+                }
+            }
+        });
         crate5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cratesToAdd += 5;
                 amountCrates.setText(Integer.toString(cratesToAdd));
+            }
+        });
+        crateMin5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd -= 5;
+                if(cratesToAdd < 0){
+                    cratesToAdd = 0;
+                    amountCrates.setText(Integer.toString(cratesToAdd));
+                }
             }
         });
         crate10.setOnClickListener(new View.OnClickListener() {
@@ -215,11 +251,31 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 amountCrates.setText(Integer.toString(cratesToAdd));
             }
         });
+        crateMin10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd -= 10;
+                if(cratesToAdd < 0){
+                    cratesToAdd = 0;
+                    amountCrates.setText(Integer.toString(cratesToAdd));
+                }
+            }
+        });
         crate20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cratesToAdd += 20;
                 amountCrates.setText(Integer.toString(cratesToAdd));
+            }
+        });
+        crateMin20.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cratesToAdd -= 20;
+                if(cratesToAdd < 0){
+                    cratesToAdd = 0;
+                    amountCrates.setText(Integer.toString(cratesToAdd));
+                }
             }
         });
 
@@ -230,11 +286,31 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 amountBottles.setText(Integer.toString(bottlesToAdd));
             }
         });
+        bottleMin1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd -= 1;
+                if(bottlesToAdd < 0){
+                    bottlesToAdd = 0;
+                    amountBottles.setText(Integer.toString(bottlesToAdd));
+                }
+            }
+        });
         bottle5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottlesToAdd += 5;
                 amountBottles.setText(Integer.toString(bottlesToAdd));
+            }
+        });
+        bottleMin5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd -= 5;
+                if(bottlesToAdd < 0){
+                    bottlesToAdd = 0;
+                    amountBottles.setText(Integer.toString(bottlesToAdd));
+                }
             }
         });
         bottle10.setOnClickListener(new View.OnClickListener() {
@@ -244,11 +320,31 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 amountBottles.setText(Integer.toString(bottlesToAdd));
             }
         });
+        bottleMin10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd -= 10;
+                if(bottlesToAdd < 0){
+                    bottlesToAdd = 0;
+                    amountBottles.setText(Integer.toString(bottlesToAdd));
+                }
+            }
+        });
         bottle20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottlesToAdd += 20;
                 amountBottles.setText(Integer.toString(bottlesToAdd));
+            }
+        });
+        bottleMin20.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottlesToAdd -= 20;
+                if(bottlesToAdd < 0){
+                    bottlesToAdd = 0;
+                    amountBottles.setText(Integer.toString(bottlesToAdd));
+                }
             }
         });
 

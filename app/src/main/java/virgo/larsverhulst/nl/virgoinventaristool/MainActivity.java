@@ -2,6 +2,8 @@ package virgo.larsverhulst.nl.virgoinventaristool;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -12,13 +14,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,6 +41,7 @@ import virgo.larsverhulst.nl.virgoinventaristool.Adapters.ScreenSlideAdapter;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonAlcoholParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonColdDrinksParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
+import virgo.larsverhulst.nl.virgoinventaristool.Util.LocaleHelper;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -52,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean isDone = false;
 
-    private int cratesToAdd = 0;
-    private int bottlesToAdd = 0;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
 
 
     /**
@@ -65,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button merchButton;
     private Button clothesButton;
     private Button otherButton;
+
+    /**
+     * attributes for the settings buttons
+     */
+    private ImageButton languageButton;
 
     /**
      * attribte for the buttons to add or remove stuff
@@ -89,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<Button> navigationButtons;
 
-    Dialog amountPopup;
+    Dialog languagePopup;
 
 
     @Override
@@ -101,8 +108,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int permissionCheck2 = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_NETWORK_STATE);
 
+        languagePopup = new Dialog(this);
+
         requestQueue = RequestQueueSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
+        editor = this.getSharedPreferences("settings", Context.MODE_PRIVATE).edit();
+        prefs = this.getSharedPreferences("settings", Context.MODE_PRIVATE);
+
+        String langString = prefs.getString("lang" , "EN");
+        LocaleHelper.setLocale(this, langString);
         items = new ArrayList<>();
         navigationButtons = new ArrayList<>();
 
@@ -121,12 +135,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //show the activity in full screen
 
 
-        amountPopup = new Dialog(this);
-
-
         /**
          * Assignments to the layout items
          */
+        languageButton = findViewById(R.id.mainScreen_languageButton);
+        languageButton.setOnClickListener(this);
+
         inButton = findViewById(R.id.mainScreen_inButton);
         inButton.setOnClickListener(this);
 
@@ -204,6 +218,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.mainScreen_inButton:
                 addItemsInDb();
                 break;
+            case R.id.mainScreen_languageButton:
+                showLanguagePopup();
+                break;
         }
     }
 
@@ -253,102 +270,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void ShowPopup(View v) {
+    public void showLanguagePopup() {
+        languagePopup.setContentView(R.layout.language_popup);
 
-        final TextView amountCrates;
-        final TextView amountBottles;
+        final Spinner languageSpinner = languagePopup.findViewById(R.id.languagePopup_spinner);
+        Button applyButton = languagePopup.findViewById(R.id.languagePopup_applyButton);
 
-        Button crate1;
-        Button crate5;
-        Button crate10;
-        Button crate20;
+        if(prefs.getString("lang" , "EN").equals("NL")){
+            languageSpinner.setSelection(0);
+        }else if(prefs.getString("lang" , "EN").equals("EN")){
+            languageSpinner.setSelection(1);
+        }
 
-        Button bottle1;
-        Button bottle5;
-        Button bottle10;
-        Button bottle20;
-
-        Button addButton;
-
-        amountPopup.setContentView(R.layout.custom_popup);
-
-
-        amountCrates = amountPopup.findViewById(R.id.customPopup_amountOfCrates);
-        amountCrates.setText(Integer.toString(cratesToAdd));
-        amountBottles = amountPopup.findViewById(R.id.customPopup_amountOfBottles);
-        amountBottles.setText(Integer.toString(bottlesToAdd));
-
-        crate1 = amountPopup.findViewById(R.id.customPopup_cr1);
-        crate5 = amountPopup.findViewById(R.id.customPopup_cr5);
-        crate10 = amountPopup.findViewById(R.id.customPopup_cr10);
-        crate20 = amountPopup.findViewById(R.id.customPopup_cr20);
-
-        bottle1 = amountPopup.findViewById(R.id.customPopup_bo1);
-        bottle5 = amountPopup.findViewById(R.id.customPopup_bo5);
-        bottle10 = amountPopup.findViewById(R.id.customPopup_bo10);
-        bottle20 = amountPopup.findViewById(R.id.customPopup_bo20);
-
-        addButton = findViewById(R.id.customPopup_addButton);
-
-        crate1.setOnClickListener(new View.OnClickListener() {
+        applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cratesToAdd += 1;
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crate5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd += 5;
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crate10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd += 10;
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crate20.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd += 20;
-                amountCrates.setText(Integer.toString(cratesToAdd));
+                int language = (int)languageSpinner.getSelectedItemId();
+
+                switch(language){
+                    case 0:
+                        LocaleHelper.setLocale(MainActivity.this, "NL");
+                        editor.putString("lang" , "NL");
+                        editor.commit();
+                        System.out.println("Dutch pushed Lang string: " + prefs.getString("lang" , "def"));
+                        recreate();
+                        break;
+                    case 1:
+                        LocaleHelper.setLocale(MainActivity.this,"EN");
+                        editor.putString("lang" , "EN");
+                        editor.commit();
+                        recreate();
+                        break;
+                }
+                languagePopup.dismiss();
             }
         });
 
-        bottle1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 1;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottle5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 5;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottle10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 10;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottle20.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 20;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
 
-        amountPopup.show();
+        languagePopup.show();
     }
 
     protected void onStop() {
