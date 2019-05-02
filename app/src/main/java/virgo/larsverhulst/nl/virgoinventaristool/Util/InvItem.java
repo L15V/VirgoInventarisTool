@@ -1,6 +1,8 @@
 package virgo.larsverhulst.nl.virgoinventaristool.Util;
 
-public class InvItem {
+import java.io.Serializable;
+
+public class InvItem implements Serializable {
     private String nameOfDrink;
     private String kindOfDrink;
     private int crates;

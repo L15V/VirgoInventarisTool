@@ -31,6 +31,15 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +53,7 @@ import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.LocaleHelper;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
 
     private RequestQueue requestQueue;
 
@@ -107,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.INTERNET);
         int permissionCheck2 = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_NETWORK_STATE);
+        int permissionCheck3 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck4 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
 
         languagePopup = new Dialog(this);
 
@@ -198,6 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
+        getBackupArray();
     }
 
     @Override
@@ -355,10 +370,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.items = items;
     }
 
+    /**
+     * add item to items array and display on screen
+     * @param item - InvItem item to add
+     */
     public void addItemtoList(InvItem item) {
         items.add(item);
         invAdapter.update(items);
         invAdapter.notifyDataSetChanged();
+        backupArray();
     }
 
     /**
@@ -437,10 +457,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         try {
-            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), "http://192.168.0.19:8080/insertcolddrinks/");
+            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), "http://192.168.178.26:8080/insertcolddrinks/");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         items.clear();
+        empyBackupArray();
+        invAdapter.update(items);
+        invAdapter.notifyDataSetChanged();
+    }
+
+    public void backupArray(){
+        String filePath = this.getFilesDir().getPath().toString() + "/backupArray.virgoInv";
+        File file = new File(filePath);
+
+        if (!file.exists())
+        {
+            try
+            {
+                file.createNewFile();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(filePath);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(items);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getBackupArray(){
+        String filePath = this.getFilesDir().getPath().toString() + "/backupArray.virgoInv";
+        File file = new File(filePath);
+
+        ArrayList<InvItem> tempItems = new ArrayList<>();
+        ObjectInputStream input;
+        if(file.exists()){
+            try{
+                input = new ObjectInputStream(new FileInputStream(file));
+                tempItems = (ArrayList<InvItem>) input.readObject();
+                System.out.println("tempfiles: " + tempItems.get(0).getNameOfDrink());
+                items = tempItems;
+                invAdapter.update(items);
+                invAdapter.notifyDataSetChanged();
+
+            } catch (FileNotFoundException | ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean empyBackupArray(){
+        Boolean succes =  false;
+        String filePath = this.getFilesDir().getPath().toString() + "/backupArray.virgoInv";
+        File file = new File(filePath);
+        succes = file.delete();
+
+        return succes;
     }
 }
