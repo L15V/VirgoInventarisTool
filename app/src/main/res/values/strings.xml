@@ -21,4 +21,11 @@
         <item>Dutch</item>
         <item>English</item>
     </string-array>
+    <string name="ipAdres">IP address</string>
+    <string name="port">port</string>
+    <string name="currentSettings">current settings</string>
+    <string name="wrongArgument">wrong arguments</string>
+    <string name="nAllowedValue">not allowed value</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

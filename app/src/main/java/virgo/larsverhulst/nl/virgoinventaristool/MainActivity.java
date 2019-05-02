@@ -36,7 +36,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -47,6 +46,8 @@ import java.util.Map;
 
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.InvItemRViewAdapter;
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.ScreenSlideAdapter;
+import virgo.larsverhulst.nl.virgoinventaristool.Dialogs.LanguagePopup;
+import virgo.larsverhulst.nl.virgoinventaristool.Dialogs.SettingsPopup;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonAlcoholParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonColdDrinksParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * attributes for the settings buttons
      */
     private ImageButton languageButton;
+    private ImageButton settingsButton;
+    private ImageButton clearButton;
 
     /**
      * attribte for the buttons to add or remove stuff
@@ -152,7 +155,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          * Assignments to the layout items
          */
         languageButton = findViewById(R.id.mainScreen_languageButton);
+        settingsButton = findViewById(R.id.mainScreen_settings);
+        clearButton = findViewById(R.id.mainScreen_clearButton);
         languageButton.setOnClickListener(this);
+        settingsButton.setOnClickListener(this);
+        clearButton.setOnClickListener(this);
 
         inButton = findViewById(R.id.mainScreen_inButton);
         inButton.setOnClickListener(this);
@@ -234,7 +241,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 addItemsInDb();
                 break;
             case R.id.mainScreen_languageButton:
-                showLanguagePopup();
+                LanguagePopup lp = new LanguagePopup(this, this);
+                lp.showLanguagePopup();
+                break;
+            case R.id.mainScreen_settings:
+                SettingsPopup sp = new SettingsPopup(this);
+                sp.showSettingsPopup();
+                break;
+            case R.id.mainScreen_clearButton:
+                clearArray();
                 break;
         }
     }
@@ -283,46 +298,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             clothesButton.setBackgroundColor(getResources().getColor(R.color.LightBlue));
             otherButton.setBackgroundColor(getResources().getColor(R.color.LightBlue));
         }
-    }
-
-    public void showLanguagePopup() {
-        languagePopup.setContentView(R.layout.language_popup);
-
-        final Spinner languageSpinner = languagePopup.findViewById(R.id.languagePopup_spinner);
-        Button applyButton = languagePopup.findViewById(R.id.languagePopup_applyButton);
-
-        if(prefs.getString("lang" , "EN").equals("NL")){
-            languageSpinner.setSelection(0);
-        }else if(prefs.getString("lang" , "EN").equals("EN")){
-            languageSpinner.setSelection(1);
-        }
-
-        applyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int language = (int)languageSpinner.getSelectedItemId();
-
-                switch(language){
-                    case 0:
-                        LocaleHelper.setLocale(MainActivity.this, "NL");
-                        editor.putString("lang" , "NL");
-                        editor.commit();
-                        System.out.println("Dutch pushed Lang string: " + prefs.getString("lang" , "def"));
-                        recreate();
-                        break;
-                    case 1:
-                        LocaleHelper.setLocale(MainActivity.this,"EN");
-                        editor.putString("lang" , "EN");
-                        editor.commit();
-                        recreate();
-                        break;
-                }
-                languagePopup.dismiss();
-            }
-        });
-
-
-        languagePopup.show();
     }
 
     protected void onStop() {
@@ -457,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         try {
-            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), "http://192.168.178.26:8080/insertcolddrinks/");
+            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip" , "0.0.0.0")+ prefs.getString("port" , "0")+"/insertcolddrinks/");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -524,5 +499,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         succes = file.delete();
 
         return succes;
+    }
+
+    public void clearArray(){
+        empyBackupArray();
+        this.items.clear();
+        invAdapter.update(items);
+        invAdapter.notifyDataSetChanged();
     }
 }
