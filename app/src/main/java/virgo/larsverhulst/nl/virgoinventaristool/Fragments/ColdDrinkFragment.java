@@ -223,8 +223,8 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 cratesToAdd -= 1;
                 if(cratesToAdd < 0){
                     cratesToAdd = 0;
-                    amountCrates.setText(Integer.toString(cratesToAdd));
                 }
+                amountCrates.setText(Integer.toString(cratesToAdd));
             }
         });
         crate5.setOnClickListener(new View.OnClickListener() {
@@ -240,8 +240,8 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 cratesToAdd -= 5;
                 if(cratesToAdd < 0){
                     cratesToAdd = 0;
-                    amountCrates.setText(Integer.toString(cratesToAdd));
                 }
+                amountCrates.setText(Integer.toString(cratesToAdd));
             }
         });
         crate10.setOnClickListener(new View.OnClickListener() {
@@ -257,8 +257,8 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 cratesToAdd -= 10;
                 if(cratesToAdd < 0){
                     cratesToAdd = 0;
-                    amountCrates.setText(Integer.toString(cratesToAdd));
                 }
+                amountCrates.setText(Integer.toString(cratesToAdd));
             }
         });
         crate20.setOnClickListener(new View.OnClickListener() {
@@ -274,8 +274,8 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 cratesToAdd -= 20;
                 if(cratesToAdd < 0){
                     cratesToAdd = 0;
-                    amountCrates.setText(Integer.toString(cratesToAdd));
                 }
+                amountCrates.setText(Integer.toString(cratesToAdd));
             }
         });
 
@@ -292,8 +292,8 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 bottlesToAdd -= 1;
                 if(bottlesToAdd < 0){
                     bottlesToAdd = 0;
-                    amountBottles.setText(Integer.toString(bottlesToAdd));
                 }
+                amountBottles.setText(Integer.toString(bottlesToAdd));
             }
         });
         bottle5.setOnClickListener(new View.OnClickListener() {
@@ -309,8 +309,8 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 bottlesToAdd -= 5;
                 if(bottlesToAdd < 0){
                     bottlesToAdd = 0;
-                    amountBottles.setText(Integer.toString(bottlesToAdd));
                 }
+                amountBottles.setText(Integer.toString(bottlesToAdd));
             }
         });
         bottle10.setOnClickListener(new View.OnClickListener() {
@@ -326,8 +326,8 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 bottlesToAdd -= 10;
                 if(bottlesToAdd < 0){
                     bottlesToAdd = 0;
-                    amountBottles.setText(Integer.toString(bottlesToAdd));
                 }
+                amountBottles.setText(Integer.toString(bottlesToAdd));
             }
         });
         bottle20.setOnClickListener(new View.OnClickListener() {
@@ -343,19 +343,24 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
                 bottlesToAdd -= 20;
                 if(bottlesToAdd < 0){
                     bottlesToAdd = 0;
-                    amountBottles.setText(Integer.toString(bottlesToAdd));
                 }
+                amountBottles.setText(Integer.toString(bottlesToAdd));
             }
         });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InvItem item = new InvItem(drinkName, kindOfDrink , cratesToAdd , bottlesToAdd);
-                activity.addItemtoList(item);
-                bottlesToAdd = 0;
-                cratesToAdd = 0;
-                amountPopup.dismiss();
+                if(bottlesToAdd == 0 && cratesToAdd == 0){
+                    amountPopup.dismiss();
+                }else{
+                    InvItem item = new InvItem(drinkName, kindOfDrink , cratesToAdd , bottlesToAdd);
+                    activity.addItemtoList(item);
+                    bottlesToAdd = 0;
+                    cratesToAdd = 0;
+                    amountPopup.dismiss();
+                }
+
 
             }
         });
