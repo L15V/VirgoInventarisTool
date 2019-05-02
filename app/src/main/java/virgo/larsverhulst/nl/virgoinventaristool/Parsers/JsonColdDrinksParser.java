@@ -34,6 +34,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
+import virgo.larsverhulst.nl.virgoinventaristool.Util.RandomString;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
@@ -797,7 +798,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
     public int getLatestDrinks() throws JSONException {
         int succes = 0;
 
-        this.execute(sprefs.getString("ip" , "0.0.0.0") + sprefs.getString("port", "0") +"/getlatestcolddrinks/");
+        this.execute(sprefs.getString("ip" , "0.0.0.0") + sprefs.getString("port", "0") +"/getlatestcolddrinks/?unused=" + new RandomString());
         if (this.getStatus() == Status.FINISHED) {
             succes = 1;
         }
@@ -822,6 +823,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             System.out.println(url);
 
             URLConnection connection = url.openConnection();
+            connection.addRequestProperty("Cache-Control", "no-cache");
 
             reader = new BufferedReader((new InputStreamReader(connection.getInputStream())));
             response = reader.readLine().toString();
@@ -856,7 +858,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 System.out.println("Out Response: " + jsonArray);
-
+                System.out.println("Json Lenth: " + jsonArray.length());
                 if(jsonArray.length() != 0) {
                     JSONObject drinks = jsonArray.getJSONObject(0);
 
@@ -891,6 +893,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
                     setFrist(0);
                     setChocomel(0);
                     setSpa_rood(0);
+                    editor.commit();
                 }
 
                 done = true;

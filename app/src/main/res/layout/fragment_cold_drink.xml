@@ -8,7 +8,7 @@
     tools:context=".Fragments.ColdDrinkFragment" >
 
     <Button
-        android:id="@+id/alcohol_hertogJan"
+        android:id="@+id/cold_Drink_cola"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
     <Button
-        android:id="@+id/alcohol_bacardi"
+        android:id="@+id/cold_drink_cola_zero"
         android:layout_width="0dp"
         android:layout_height="60sp"
         android:layout_marginStart="8dp"
@@ -40,7 +40,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
     <Button
-        android:id="@+id/alcohol_jupiler"
+        android:id="@+id/cold_drink_sprite"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -77,7 +77,7 @@
         app:layout_constraintGuide_begin="730dp" />
 
     <Button
-        android:id="@+id/alcohol_palm"
+        android:id="@+id/cold_drink_fuze_green"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -90,10 +90,10 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_liefmans" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_fanta" />
 
     <Button
-        android:id="@+id/alcohol_bacardi_razz"
+        android:id="@+id/cold_drink_fuze_sparkling"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -106,10 +106,10 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_rode_wijn" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_cassis" />
 
     <Button
-        android:id="@+id/alcohol_hoegaarde"
+        android:id="@+id/cold_drink_fuze_blacktea"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -122,10 +122,10 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_leffe_blond" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_redbull" />
 
     <Button
-        android:id="@+id/alcohol_liefmans"
+        android:id="@+id/cold_drink_fanta"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -137,10 +137,10 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_hertogJan" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_Drink_cola" />
 
     <Button
-        android:id="@+id/alcohol_rode_wijn"
+        android:id="@+id/cold_drink_cassis"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -152,10 +152,10 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_bacardi" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_cola_zero" />
 
     <Button
-        android:id="@+id/alcohol_leffe_blond"
+        android:id="@+id/cold_drink_redbull"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -167,10 +167,10 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_jupiler" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_sprite" />
 
     <Button
-        android:id="@+id/alcohol_witte_wijn"
+        android:id="@+id/cold_drink_o2Geel"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -182,7 +182,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_palm" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_fuze_green" />
 
     <Button
         android:id="@+id/cold_drinks_o2Rood"
@@ -197,7 +197,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_bacardi_razz" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_fuze_sparkling" />
 
     <Button
         android:id="@+id/cold_drinks_o2Groen"
@@ -212,7 +212,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_hoegaarde" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_fuze_blacktea" />
 
     <Button
         android:id="@+id/cold_drinks_fristi"
@@ -227,7 +227,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_witte_wijn" />
+        app:layout_constraintTop_toBottomOf="@+id/cold_drink_o2Geel" />
 
     <Button
         android:id="@+id/cold_drinks_chocomel"

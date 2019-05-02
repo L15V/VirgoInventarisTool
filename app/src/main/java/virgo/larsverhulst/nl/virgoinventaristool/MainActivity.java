@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void getJsonResponsePost(JSONArray array, String url) {
         url = url;
 
-        JSONArray json;
+        JSONArray json = null;
         json = array;
         System.out.println("JSON Array: " + json);
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.POST, url, json, new Response.Listener<JSONArray>() {
@@ -330,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", "My useragent");
+                headers.put("Cache-Control", "no-cache");
                 return headers;
             }
         };
@@ -428,11 +429,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         coldDrinksParser.addSpa_rood(i.getTotalToAdd());
                         break;
                 }
+            }else if (i.getKindOfDrink().equals("alcohol")) {
+                switch (i.getNameOfDrink()) {
+                    case "hertog_jan":
+                        alcoholParser.addHertog_jan(i.getTotalToAdd());
+                        break;
+                    case "jupiler":
+                        alcoholParser.addJupiler(i.getTotalToAdd());
+                        break;
+                    case "liefmans":
+                        alcoholParser.addLiefmans(i.getTotalToAdd());
+                        break;
+                    case "leffe_blond":
+                        alcoholParser.addLeffe_blond(i.getTotalToAdd());
+                        break;
+                    case "palm":
+                        alcoholParser.addPalm(i.getTotalToAdd());
+                        break;
+                    case "hoegaarde":
+                        alcoholParser.addHoegaarde(i.getTotalToAdd());
+                        break;
+                    case "witte_wijn":
+                        alcoholParser.addWitte_wijn(i.getTotalToAdd());
+                        break;
+                    case "rode_wijn":
+                        alcoholParser.addRode_wijn(i.getTotalToAdd());
+                        break;
+                    case "bacardi":
+                        alcoholParser.addBacardi(i.getTotalToAdd());
+                        break;
+                    case "bacardi_razz":
+                        alcoholParser.addBacardi_razz(i.getTotalToAdd());
+                }
             }
         }
 
         try {
             getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip" , "0.0.0.0")+ prefs.getString("port" , "0")+"/insertcolddrinks/");
+            getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip" , "0.0.0.0")+ prefs.getString("port" , "0")+"/insertalcohol/");
         } catch (JSONException e) {
             e.printStackTrace();
         }

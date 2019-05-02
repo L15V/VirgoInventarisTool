@@ -619,11 +619,12 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
     }
 
     protected void onPostExecute(String response) {
-        System.out.println("OnpostExecute started!");
+        System.out.println("OnpostExecute started!" + response);
         if (response != null) {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 System.out.println("Out Response: " + jsonArray);
+                System.out.println("AlcoholJsonLength: " + jsonArray.length());
 
                 if(jsonArray.length() != 0) {
                     JSONObject drinks = jsonArray.getJSONObject(0);
@@ -649,6 +650,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
                     setRode_wijn(0);
                     setBacardi(0);
                     setBacardi_razz(0);
+                    editor.commit();
                 }
 
                 done = true;
