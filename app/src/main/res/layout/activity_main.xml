@@ -212,7 +212,7 @@
         app:srcCompat="@drawable/ic_settings" />
 
     <ImageButton
-        android:id="@+id/mainScreen_language"
+        android:id="@+id/mainScreen_languageButton"
         android:layout_width="52dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"

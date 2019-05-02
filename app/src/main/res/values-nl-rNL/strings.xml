@@ -15,4 +15,11 @@
     <string name="crates">kratten</string>
     <string name="bottles">flessen</string>
     <string name="add">toevoegen</string>
+    <string name="select_language">Selecteer taal</string>
+    <string name="apply">bevestigen</string>
+
+    <string-array name="country_array">
+        <item>Nederlands</item>
+        <item>Engels</item>
+    </string-array>
 </resources>
