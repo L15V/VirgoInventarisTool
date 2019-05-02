@@ -44,12 +44,16 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
     private SharedPreferences.Editor editor;
     private SharedPreferences prefs;
 
+    private SharedPreferences sprefs;
+
     private boolean done = false;
 
     public JsonAlcoholParser(Context context) {
         this.context = context;
         editor = this.context.getSharedPreferences("alcohol", Context.MODE_PRIVATE).edit();
         prefs = this.context.getSharedPreferences("alcohol", Context.MODE_PRIVATE);
+
+        sprefs = this.context.getSharedPreferences("settings" , Context.MODE_PRIVATE);
     }
 
     public JsonAlcoholParser(Context context, int hertog_jan, int jupiler, int liefmans, int leffe_blond, int palm, int hoegaarde, int witte_wijn, int rode_wijn, int bacardi, int bacardy_razz) {
@@ -561,7 +565,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
     public int getLatestDrinks() throws JSONException {
         int succes = 0;
 
-        this.execute("http://192.168.178.26:8080/getlatestalcoholdrinks");
+        this.execute(sprefs.getString("ip" , "0.0.0.0")+ sprefs.getString("port" , "0")+"/getlatestalcoholdrinks");
         if (this.getStatus() == Status.FINISHED) {
             succes = 1;
         }

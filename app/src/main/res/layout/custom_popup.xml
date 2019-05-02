@@ -202,10 +202,13 @@
         android:id="@+id/customPopup_bo5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
         android:text="+5"
-        app:layout_constraintTop_toBottomOf="@+id/customPopup_bo1"
-        tools:layout_editor_absoluteX="242dp" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toEndOf="@+id/customPopup_splitter3"
+        app:layout_constraintTop_toBottomOf="@+id/customPopup_bo1" />
 
     <Button
         android:id="@+id/customPopup_bo10"

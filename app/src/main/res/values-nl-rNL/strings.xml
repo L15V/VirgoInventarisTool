@@ -22,4 +22,9 @@
         <item>Nederlands</item>
         <item>Engels</item>
     </string-array>
+    <string name="ipAdres">IP adres</string>
+    <string name="port">poort</string>
+    <string name="currentSettings">huidige instellingen</string>
+    <string name="wrongArgument">geen geldige input</string>
+    <string name="nAllowedValue">niet toegestaande waarde</string>
 </resources>
