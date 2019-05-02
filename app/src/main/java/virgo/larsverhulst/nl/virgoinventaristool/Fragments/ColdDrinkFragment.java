@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import virgo.larsverhulst.nl.virgoinventaristool.Dialogs.DrinkPopup;
 import virgo.larsverhulst.nl.virgoinventaristool.MainActivity;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonAlcoholParser;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonColdDrinksParser;
@@ -41,11 +42,7 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
     private Context context;
     private MainActivity activity;
 
-    Dialog amountPopup;
-
-
-    private int cratesToAdd = 0;
-    private int bottlesToAdd = 0;
+    DrinkPopup drinkPopup;
 
     private String kindofDrink = "cold_drink";
 
@@ -63,7 +60,7 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
         View v = inflater.inflate(R.layout.fragment_cold_drink, container, false);
         activity = (MainActivity) getActivity();
 
-        amountPopup = new Dialog(v.getContext());
+        drinkPopup = new DrinkPopup(getContext(), activity);
 
         colaButton = v.findViewById(R.id.cold_drinks_cola);
         colaZeroButton = v.findViewById(R.id.cold_drinks_colaZero);
@@ -105,275 +102,50 @@ public class ColdDrinkFragment extends Fragment implements View.OnClickListener{
         switch(v.getId()){
 
             case R.id.cold_drinks_cola:
-                ShowPopup("cola" , kindofDrink, "Cola");
+                drinkPopup.ShowPopup("cola" , kindofDrink, "Cola");
                 break;
             case R.id.cold_drinks_colaZero:
-                ShowPopup("cola_zero" , kindofDrink, "Cola Zero");
+                drinkPopup.ShowPopup("cola_zero" , kindofDrink, "Cola Zero");
                 break;
             case R.id.cold_drinks_sprite:
-                ShowPopup("sprite" , kindofDrink, "Sprite");
+                drinkPopup.ShowPopup("sprite" , kindofDrink, "Sprite");
                 break;
             case R.id.cold_drinks_fanta:
-                ShowPopup("fanta" , kindofDrink, "Famta");
+                drinkPopup.ShowPopup("fanta" , kindofDrink, "Famta");
                 break;
             case R.id.cold_drinks_cassis:
-                ShowPopup("cassis", kindofDrink, "Cassis");
+                drinkPopup.ShowPopup("cassis", kindofDrink, "Cassis");
                 break;
             case R.id.cold_drinks_redbull:
-                ShowPopup("redbull", kindofDrink, "Redbull");
+                drinkPopup.ShowPopup("redbull", kindofDrink, "Redbull");
                 break;
             case R.id.cold_drinks_fuze_green:
-                ShowPopup("fuze_green", kindofDrink, "Fuzetea green");
+                drinkPopup.ShowPopup("fuze_green", kindofDrink, "Fuzetea green");
                 break;
             case R.id.cold_drinks_fuze_sparkling:
-                ShowPopup("fuze_sparkling", kindofDrink, "Fuzetea sparkling");
+                drinkPopup.ShowPopup("fuze_sparkling", kindofDrink, "Fuzetea sparkling");
                 break;
             case R.id.cold_drinks_fuze_blacktea:
-                ShowPopup("fuze_blacktea", kindofDrink, "Fuzetea blacktea");
+                drinkPopup.ShowPopup("fuze_blacktea", kindofDrink, "Fuzetea blacktea");
                 break;
             case R.id.cold_drinks_o2Geel:
-                ShowPopup("o2_geel", kindofDrink, "O2 geel");
+                drinkPopup.ShowPopup("o2_geel", kindofDrink, "O2 geel");
                 break;
             case R.id.cold_drinks_o2Rood:
-                ShowPopup("o2_rood" , kindofDrink, "O2 rood");
+                drinkPopup.ShowPopup("o2_rood" , kindofDrink, "O2 rood");
                 break;
             case R.id.cold_drinks_o2Groen:
-                ShowPopup("o2_groen", kindofDrink, "O2 groen");
+                drinkPopup.ShowPopup("o2_groen", kindofDrink, "O2 groen");
                 break;
             case R.id.cold_drinks_fristi:
-                ShowPopup("fristi", kindofDrink, "Fristi");
+                drinkPopup.ShowPopup("fristi", kindofDrink, "Fristi");
                 break;
             case R.id.cold_drinks_chocomel:
-                ShowPopup("chocomel", kindofDrink, "Chocomel");
+                drinkPopup.ShowPopup("chocomel", kindofDrink, "Chocomel");
                 break;
             case R.id.cold_drinks_spaRood:
-                ShowPopup("spa_rood", kindofDrink, "Spa rood");
+                drinkPopup.ShowPopup("spa_rood", kindofDrink, "Spa rood");
                 break;
         }
     }
-
-
-
-    public void ShowPopup(final String drinkName, final String kindOfDrink, String title){
-        final TextView titleTextView;
-
-        final TextView amountCrates;
-        final TextView amountBottles;
-
-        Button crate1;
-        Button crateMin1;
-        Button crate5;
-        Button crateMin5;
-        Button crate10;
-        Button crateMin10;
-        Button crate20;
-        Button crateMin20;
-
-        Button bottle1;
-        Button bottleMin1;
-        Button bottle5;
-        Button bottleMin5;
-        Button bottle10;
-        Button bottleMin10;
-        Button bottle20;
-        Button bottleMin20;
-
-        Button addButton;
-
-        amountPopup.setContentView(R.layout.custom_popup);
-
-        titleTextView = amountPopup.findViewById(R.id.customPopup_Drinkname);
-        titleTextView.setText(title);
-
-        amountCrates = amountPopup.findViewById(R.id.customPopup_amountOfCrates);
-        amountCrates.setText(Integer.toString(cratesToAdd));
-        amountBottles = amountPopup.findViewById(R.id.customPopup_amountOfBottles);
-        amountBottles.setText(Integer.toString(bottlesToAdd));
-
-        crate1 = amountPopup.findViewById(R.id.customPopup_cr1);
-        crateMin1 = amountPopup.findViewById(R.id.customPopup_crM1);
-        crate5 = amountPopup.findViewById(R.id.customPopup_cr5);
-        crateMin5 = amountPopup.findViewById(R.id.customPopup_crM5);
-        crate10 = amountPopup.findViewById(R.id.customPopup_cr10);
-        crateMin10 = amountPopup.findViewById(R.id.customPopup_crM10);
-        crate20 = amountPopup.findViewById(R.id.customPopup_cr20);
-        crateMin20 = amountPopup.findViewById(R.id.customPopup_crM20);
-
-        bottle1 = amountPopup.findViewById(R.id.customPopup_bo1);
-        bottleMin1 = amountPopup.findViewById(R.id.customPopup_boM1);
-        bottle5 = amountPopup.findViewById(R.id.customPopup_bo5);
-        bottleMin5 = amountPopup.findViewById(R.id.customPopup_boM5);
-        bottle10 = amountPopup.findViewById(R.id.customPopup_bo10);
-        bottleMin10 = amountPopup.findViewById(R.id.customPopup_boM10);
-        bottle20 = amountPopup.findViewById(R.id.customPopup_bo20);
-        bottleMin20 = amountPopup.findViewById(R.id.customPopup_boM20);
-
-        addButton = amountPopup.findViewById(R.id.customPopup_addButton);
-
-        crate1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd += 1;
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crateMin1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd -= 1;
-                if(cratesToAdd < 0){
-                    cratesToAdd = 0;
-                }
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crate5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd += 5;
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crateMin5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd -= 5;
-                if(cratesToAdd < 0){
-                    cratesToAdd = 0;
-                }
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crate10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd += 10;
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crateMin10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd -= 10;
-                if(cratesToAdd < 0){
-                    cratesToAdd = 0;
-                }
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crate20.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd += 20;
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-        crateMin20.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cratesToAdd -= 20;
-                if(cratesToAdd < 0){
-                    cratesToAdd = 0;
-                }
-                amountCrates.setText(Integer.toString(cratesToAdd));
-            }
-        });
-
-        bottle1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 1;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottleMin1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd -= 1;
-                if(bottlesToAdd < 0){
-                    bottlesToAdd = 0;
-                }
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottle5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 5;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottleMin5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd -= 5;
-                if(bottlesToAdd < 0){
-                    bottlesToAdd = 0;
-                }
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottle10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 10;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottleMin10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd -= 10;
-                if(bottlesToAdd < 0){
-                    bottlesToAdd = 0;
-                }
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottle20.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd += 20;
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-        bottleMin20.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottlesToAdd -= 20;
-                if(bottlesToAdd < 0){
-                    bottlesToAdd = 0;
-                }
-                amountBottles.setText(Integer.toString(bottlesToAdd));
-            }
-        });
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(bottlesToAdd == 0 && cratesToAdd == 0){
-                    amountPopup.dismiss();
-                }else{
-                    InvItem item = new InvItem(drinkName, kindOfDrink , cratesToAdd , bottlesToAdd);
-                    activity.addItemtoList(item);
-                    bottlesToAdd = 0;
-                    cratesToAdd = 0;
-                    amountPopup.dismiss();
-                }
-
-
-            }
-        });
-
-        amountPopup.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                bottlesToAdd = 0;
-                cratesToAdd = 0;
-            }
-        });
-
-        amountPopup.show();
-    }
-
 }
