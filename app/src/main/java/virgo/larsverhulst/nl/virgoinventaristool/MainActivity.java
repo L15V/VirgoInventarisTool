@@ -465,6 +465,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         try {
+            System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
+            System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
             getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip" , "0.0.0.0")+ prefs.getString("port" , "0")+"/insertcolddrinks/");
             getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip" , "0.0.0.0")+ prefs.getString("port" , "0")+"/insertalcohol/");
         } catch (JSONException e) {

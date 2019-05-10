@@ -52,12 +52,14 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
         this.context = context;
         editor = this.context.getSharedPreferences("alcohol", Context.MODE_PRIVATE).edit();
         prefs = this.context.getSharedPreferences("alcohol", Context.MODE_PRIVATE);
+        editor.apply();
 
         sprefs = this.context.getSharedPreferences("settings" , Context.MODE_PRIVATE);
     }
 
     public JsonAlcoholParser(Context context, int hertog_jan, int jupiler, int liefmans, int leffe_blond, int palm, int hoegaarde, int witte_wijn, int rode_wijn, int bacardi, int bacardy_razz) {
         editor = this.context.getSharedPreferences("alcohol", Context.MODE_PRIVATE).edit();
+        editor.apply();
         prefs = this.context.getSharedPreferences("alcohol", Context.MODE_PRIVATE);
 
         this.context = context;
@@ -73,7 +75,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
         editor.putInt("bacardi", bacardi);
         editor.putInt("bacardi_razz", bacardi);
 
-        editor.commit();
+        editor.apply();
     }
 
     public boolean isDone() {
@@ -100,7 +102,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setHertog_jan(int hertog_jan) {
         editor.putInt("hertog_jan", hertog_jan);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -110,7 +112,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addHertog_jan(int amount) {
         editor.putInt("hertog_jan", (prefs.getInt("hertog_jan", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -123,7 +125,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
         int newDrink = oldDrink - amount;
         if (newDrink >= 0) {
             editor.putInt("hertog_jan", newDrink);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -143,7 +145,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setJupiler(int jupiler) {
         editor.putInt("jupiler", jupiler);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -153,7 +155,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addJupiler(int amount) {
         editor.putInt("jupiler", (prefs.getInt("jupiler", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -168,7 +170,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("jupiler", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -187,7 +189,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setLiefmans(int liefmans) {
         editor.putInt("liefmans", liefmans);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -197,7 +199,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addLiefmans(int amount) {
         editor.putInt("liefmans", (prefs.getInt("liefmans", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -212,7 +214,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("liefmans", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -231,7 +233,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setLeffe_blond(int leffe_blond) {
         editor.putInt("leffe_blond", leffe_blond);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -241,7 +243,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addLeffe_blond(int amount) {
         editor.putInt("leffe_blond", (prefs.getInt("leffe_blond", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -256,7 +258,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("leffe_blond", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -275,7 +277,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setPalm(int palm) {
         editor.putInt("palm", palm);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -285,7 +287,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addPalm(int amount) {
         editor.putInt("palm", (prefs.getInt("palm", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -300,7 +302,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("palm", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -319,7 +321,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setHoegaarde(int hoegaarde) {
         editor.putInt("hoegaarde", hoegaarde);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -329,7 +331,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addHoegaarde(int amount) {
         editor.putInt("hoegaarde", (prefs.getInt("hoegaarde", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -344,7 +346,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("hoegaarde", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -364,7 +366,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setWitte_wijn(int witte_wijn) {
         editor.putInt("witte_wijn", witte_wijn);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -374,7 +376,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addWitte_wijn(int amount) {
         editor.putInt("witte_wijn", (prefs.getInt("witte_wijn", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -389,7 +391,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("witte_wijn", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -408,7 +410,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setRode_wijn(int rode_wijn) {
         editor.putInt("rode_wijn", rode_wijn);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -418,7 +420,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addRode_wijn(int amount) {
         editor.putInt("rode_wijn", (prefs.getInt("rode_wijn", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -433,7 +435,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("rode_wijn", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -452,7 +454,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setBacardi(int bacardi) {
         editor.putInt("bacardi", bacardi);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -462,7 +464,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addBacardi(int amount) {
         editor.putInt("bacardi", (prefs.getInt("bacardi", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -477,7 +479,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("bacardi", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -497,7 +499,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void setBacardi_razz(int bacardi_razz) {
         editor.putInt("bacardi_razz", bacardi_razz);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -507,7 +509,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
      */
     public void addBacardi_razz(int amount) {
         editor.putInt("bacardi_razz", (prefs.getInt("bacardi_razz", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -522,7 +524,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("bacardi_razz", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
 
@@ -590,6 +592,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             System.out.println(url);
 
             URLConnection connection = url.openConnection();
+            connection.setUseCaches(false);
 
             reader = new BufferedReader((new InputStreamReader(connection.getInputStream())));
             response = reader.readLine().toString();
@@ -620,7 +623,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
 
     protected void onPostExecute(String response) {
         System.out.println("OnpostExecute started!" + response);
-        if (response != null) {
+        if (response != null && !response.equals("")) {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 System.out.println("Out Response: " + jsonArray);
@@ -639,6 +642,8 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
                     setRode_wijn(drinks.getInt("rode_wijn"));
                     setBacardi(drinks.getInt("bacardi"));
                     setBacardi_razz(drinks.getInt("bacardi_razz"));
+                    editor.apply();
+
                 }else{
                     setHertog_jan(0);
                     setJupiler(0);
@@ -650,7 +655,7 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
                     setRode_wijn(0);
                     setBacardi(0);
                     setBacardi_razz(0);
-                    editor.commit();
+                    editor.apply();
                 }
 
                 done = true;
@@ -658,6 +663,18 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else{
+            setHertog_jan(0);
+            setJupiler(0);
+            setLiefmans(0);
+            setLeffe_blond(0);
+            setPalm(0);
+            setHoegaarde(0);
+            setWitte_wijn(0);
+            setRode_wijn(0);
+            setBacardi(0);
+            setBacardi_razz(0);
+            editor.apply();
         }
     }
 }
