@@ -676,5 +676,6 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             setBacardi_razz(0);
             editor.apply();
         }
+        done = true;
     }
 }

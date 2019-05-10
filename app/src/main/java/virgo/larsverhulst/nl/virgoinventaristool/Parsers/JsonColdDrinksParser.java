@@ -924,5 +924,6 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             setSpa_rood(0);
             editor.apply();
         }
+        done = true;
     }
 }

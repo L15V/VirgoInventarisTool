@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private List<InvItem> items;
 
-    private boolean isDone = false;
+    private boolean isDone = true;
 
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -371,8 +373,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void addItemsInDb() {
-        JsonAlcoholParser alcoholParser = new JsonAlcoholParser(this);
-        JsonColdDrinksParser coldDrinksParser = new JsonColdDrinksParser(this);
+        final JsonAlcoholParser alcoholParser = new JsonAlcoholParser(this);
+        final JsonColdDrinksParser coldDrinksParser = new JsonColdDrinksParser(this);
         try {
             coldDrinksParser.getLatestDrinks();
             alcoholParser.getLatestDrinks();
@@ -380,102 +382,435 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
-        for (InvItem i : items) {
-            if (i.getKindOfDrink().equals("cold_drink")) {
-                switch (i.getNameOfDrink()) {
-                    case "cola":
-                        coldDrinksParser.addCola(i.getTotalToAdd());
-                        break;
-                    case "cola_zero":
-                        coldDrinksParser.addCola_zero(i.getTotalToAdd());
-                        break;
-                    case "sprite":
-                        coldDrinksParser.addSprite(i.getTotalToAdd());
-                        break;
-                    case "fanta":
-                        coldDrinksParser.addFanta(i.getTotalToAdd());
-                        break;
-                    case "cassis":
-                        coldDrinksParser.addCassis(i.getTotalToAdd());
-                        break;
-                    case "redbull":
-                        coldDrinksParser.addRedbull(i.getTotalToAdd());
-                        break;
-                    case "fuze_green" :
-                        coldDrinksParser.addFuze_green(i.getTotalToAdd());
-                        break;
-                    case "fuze_sparkling":
-                        coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
-                        break;
-                    case "fuze_blacktea":
-                        coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
-                        break;
-                    case "o2_geel":
-                        coldDrinksParser.addO2_geel(i.getTotalToAdd());
-                        break;
-                    case "o2_rood":
-                        coldDrinksParser.addO2_rood(i.getTotalToAdd());
-                        break;
-                    case "o2_groen":
-                        coldDrinksParser.addO2_groen(i.getTotalToAdd());
-                        break;
-                    case "fristi":
-                        coldDrinksParser.addFristi(i.getTotalToAdd());
-                        break;
-                    case "chocomel":
-                        coldDrinksParser.addChocomel(i.getTotalToAdd());
-                        break;
-                    case "spa_rood":
-                        coldDrinksParser.addSpa_rood(i.getTotalToAdd());
-                        break;
+         class MyAsyncTask extends AsyncTask<Void, Void, String> {
+            @Override protected String doInBackground(Void... params) {
+                System.out.println("alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
+                if (!alcoholParser.isDone() && !coldDrinksParser.isDone()) {
+                    isDone = false;
+                    while (!isDone) {
+                        System.out.println("Loop: alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
+                        if (alcoholParser.isDone() && coldDrinksParser.isDone()) {
+                            for (InvItem i : items) {
+                                if (i.getKindOfDrink().equals("cold_drink")) {
+                                    switch (i.getNameOfDrink()) {
+                                        case "cola":
+                                            coldDrinksParser.addCola(i.getTotalToAdd());
+                                            break;
+                                        case "cola_zero":
+                                            coldDrinksParser.addCola_zero(i.getTotalToAdd());
+                                            break;
+                                        case "sprite":
+                                            coldDrinksParser.addSprite(i.getTotalToAdd());
+                                            break;
+                                        case "fanta":
+                                            coldDrinksParser.addFanta(i.getTotalToAdd());
+                                            break;
+                                        case "cassis":
+                                            coldDrinksParser.addCassis(i.getTotalToAdd());
+                                            break;
+                                        case "redbull":
+                                            coldDrinksParser.addRedbull(i.getTotalToAdd());
+                                            break;
+                                        case "fuze_green":
+                                            coldDrinksParser.addFuze_green(i.getTotalToAdd());
+                                            break;
+                                        case "fuze_sparkling":
+                                            coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
+                                            break;
+                                        case "fuze_blacktea":
+                                            coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
+                                            break;
+                                        case "o2_geel":
+                                            coldDrinksParser.addO2_geel(i.getTotalToAdd());
+                                            break;
+                                        case "o2_rood":
+                                            coldDrinksParser.addO2_rood(i.getTotalToAdd());
+                                            break;
+                                        case "o2_groen":
+                                            coldDrinksParser.addO2_groen(i.getTotalToAdd());
+                                            break;
+                                        case "fristi":
+                                            coldDrinksParser.addFristi(i.getTotalToAdd());
+                                            break;
+                                        case "chocomel":
+                                            coldDrinksParser.addChocomel(i.getTotalToAdd());
+                                            break;
+                                        case "spa_rood":
+                                            coldDrinksParser.addSpa_rood(i.getTotalToAdd());
+                                            break;
+                                    }
+                                } else if (i.getKindOfDrink().equals("alcohol")) {
+                                    switch (i.getNameOfDrink()) {
+                                        case "hertog_jan":
+                                            alcoholParser.addHertog_jan(i.getTotalToAdd());
+                                            break;
+                                        case "jupiler":
+                                            alcoholParser.addJupiler(i.getTotalToAdd());
+                                            break;
+                                        case "liefmans":
+                                            alcoholParser.addLiefmans(i.getTotalToAdd());
+                                            break;
+                                        case "leffe_blond":
+                                            alcoholParser.addLeffe_blond(i.getTotalToAdd());
+                                            break;
+                                        case "palm":
+                                            alcoholParser.addPalm(i.getTotalToAdd());
+                                            break;
+                                        case "hoegaarde":
+                                            alcoholParser.addHoegaarde(i.getTotalToAdd());
+                                            break;
+                                        case "witte_wijn":
+                                            alcoholParser.addWitte_wijn(i.getTotalToAdd());
+                                            break;
+                                        case "rode_wijn":
+                                            alcoholParser.addRode_wijn(i.getTotalToAdd());
+                                            break;
+                                        case "bacardi":
+                                            alcoholParser.addBacardi(i.getTotalToAdd());
+                                            break;
+                                        case "bacardi_razz":
+                                            alcoholParser.addBacardi_razz(i.getTotalToAdd());
+                                    }
+                                }
+                            }
+
+                            try {
+                                System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
+                                System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
+                                getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
+                                getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            items.clear();
+                            empyBackupArray();
+                            isDone = true;
+                        }
+                    }
+                } else {
+                    for (InvItem i : items) {
+                        if (i.getKindOfDrink().equals("cold_drink")) {
+                            switch (i.getNameOfDrink()) {
+                                case "cola":
+                                    coldDrinksParser.addCola(i.getTotalToAdd());
+                                    break;
+                                case "cola_zero":
+                                    coldDrinksParser.addCola_zero(i.getTotalToAdd());
+                                    break;
+                                case "sprite":
+                                    coldDrinksParser.addSprite(i.getTotalToAdd());
+                                    break;
+                                case "fanta":
+                                    coldDrinksParser.addFanta(i.getTotalToAdd());
+                                    break;
+                                case "cassis":
+                                    coldDrinksParser.addCassis(i.getTotalToAdd());
+                                    break;
+                                case "redbull":
+                                    coldDrinksParser.addRedbull(i.getTotalToAdd());
+                                    break;
+                                case "fuze_green":
+                                    coldDrinksParser.addFuze_green(i.getTotalToAdd());
+                                    break;
+                                case "fuze_sparkling":
+                                    coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
+                                    break;
+                                case "fuze_blacktea":
+                                    coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
+                                    break;
+                                case "o2_geel":
+                                    coldDrinksParser.addO2_geel(i.getTotalToAdd());
+                                    break;
+                                case "o2_rood":
+                                    coldDrinksParser.addO2_rood(i.getTotalToAdd());
+                                    break;
+                                case "o2_groen":
+                                    coldDrinksParser.addO2_groen(i.getTotalToAdd());
+                                    break;
+                                case "fristi":
+                                    coldDrinksParser.addFristi(i.getTotalToAdd());
+                                    break;
+                                case "chocomel":
+                                    coldDrinksParser.addChocomel(i.getTotalToAdd());
+                                    break;
+                                case "spa_rood":
+                                    coldDrinksParser.addSpa_rood(i.getTotalToAdd());
+                                    break;
+                            }
+                        } else if (i.getKindOfDrink().equals("alcohol")) {
+                            switch (i.getNameOfDrink()) {
+                                case "hertog_jan":
+                                    alcoholParser.addHertog_jan(i.getTotalToAdd());
+                                    break;
+                                case "jupiler":
+                                    alcoholParser.addJupiler(i.getTotalToAdd());
+                                    break;
+                                case "liefmans":
+                                    alcoholParser.addLiefmans(i.getTotalToAdd());
+                                    break;
+                                case "leffe_blond":
+                                    alcoholParser.addLeffe_blond(i.getTotalToAdd());
+                                    break;
+                                case "palm":
+                                    alcoholParser.addPalm(i.getTotalToAdd());
+                                    break;
+                                case "hoegaarde":
+                                    alcoholParser.addHoegaarde(i.getTotalToAdd());
+                                    break;
+                                case "witte_wijn":
+                                    alcoholParser.addWitte_wijn(i.getTotalToAdd());
+                                    break;
+                                case "rode_wijn":
+                                    alcoholParser.addRode_wijn(i.getTotalToAdd());
+                                    break;
+                                case "bacardi":
+                                    alcoholParser.addBacardi(i.getTotalToAdd());
+                                    break;
+                                case "bacardi_razz":
+                                    alcoholParser.addBacardi_razz(i.getTotalToAdd());
+                            }
+                        }
+                    }
+
+                    try {
+                        System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
+                        System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
+                        getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
+                        getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    items.clear();
+                    empyBackupArray();
                 }
-            }else if (i.getKindOfDrink().equals("alcohol")) {
-                switch (i.getNameOfDrink()) {
-                    case "hertog_jan":
-                        alcoholParser.addHertog_jan(i.getTotalToAdd());
-                        break;
-                    case "jupiler":
-                        alcoholParser.addJupiler(i.getTotalToAdd());
-                        break;
-                    case "liefmans":
-                        alcoholParser.addLiefmans(i.getTotalToAdd());
-                        break;
-                    case "leffe_blond":
-                        alcoholParser.addLeffe_blond(i.getTotalToAdd());
-                        break;
-                    case "palm":
-                        alcoholParser.addPalm(i.getTotalToAdd());
-                        break;
-                    case "hoegaarde":
-                        alcoholParser.addHoegaarde(i.getTotalToAdd());
-                        break;
-                    case "witte_wijn":
-                        alcoholParser.addWitte_wijn(i.getTotalToAdd());
-                        break;
-                    case "rode_wijn":
-                        alcoholParser.addRode_wijn(i.getTotalToAdd());
-                        break;
-                    case "bacardi":
-                        alcoholParser.addBacardi(i.getTotalToAdd());
-                        break;
-                    case "bacardi_razz":
-                        alcoholParser.addBacardi_razz(i.getTotalToAdd());
-                }
+
+                return "";
+            }
+            @Override protected void onPostExecute(String result) {
+                updateArrayView();
             }
         }
 
+        MyAsyncTask task = new MyAsyncTask();
+        task.execute();
+
+
+
+
+
+/*
+
+
         try {
-            System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
-            System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
-            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip" , "0.0.0.0")+ prefs.getString("port" , "0")+"/insertcolddrinks/");
-            getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip" , "0.0.0.0")+ prefs.getString("port" , "0")+"/insertalcohol/");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        items.clear();
-        empyBackupArray();
-        invAdapter.update(items);
-        invAdapter.notifyDataSetChanged();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
+                    if (!alcoholParser.isDone() && !coldDrinksParser.isDone()) {
+                        isDone = false;
+                        while (!isDone) {
+                            System.out.println("Loop: alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
+                            if (alcoholParser.isDone() && coldDrinksParser.isDone()) {
+                                for (InvItem i : items) {
+                                    if (i.getKindOfDrink().equals("cold_drink")) {
+                                        switch (i.getNameOfDrink()) {
+                                            case "cola":
+                                                coldDrinksParser.addCola(i.getTotalToAdd());
+                                                break;
+                                            case "cola_zero":
+                                                coldDrinksParser.addCola_zero(i.getTotalToAdd());
+                                                break;
+                                            case "sprite":
+                                                coldDrinksParser.addSprite(i.getTotalToAdd());
+                                                break;
+                                            case "fanta":
+                                                coldDrinksParser.addFanta(i.getTotalToAdd());
+                                                break;
+                                            case "cassis":
+                                                coldDrinksParser.addCassis(i.getTotalToAdd());
+                                                break;
+                                            case "redbull":
+                                                coldDrinksParser.addRedbull(i.getTotalToAdd());
+                                                break;
+                                            case "fuze_green":
+                                                coldDrinksParser.addFuze_green(i.getTotalToAdd());
+                                                break;
+                                            case "fuze_sparkling":
+                                                coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
+                                                break;
+                                            case "fuze_blacktea":
+                                                coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
+                                                break;
+                                            case "o2_geel":
+                                                coldDrinksParser.addO2_geel(i.getTotalToAdd());
+                                                break;
+                                            case "o2_rood":
+                                                coldDrinksParser.addO2_rood(i.getTotalToAdd());
+                                                break;
+                                            case "o2_groen":
+                                                coldDrinksParser.addO2_groen(i.getTotalToAdd());
+                                                break;
+                                            case "fristi":
+                                                coldDrinksParser.addFristi(i.getTotalToAdd());
+                                                break;
+                                            case "chocomel":
+                                                coldDrinksParser.addChocomel(i.getTotalToAdd());
+                                                break;
+                                            case "spa_rood":
+                                                coldDrinksParser.addSpa_rood(i.getTotalToAdd());
+                                                break;
+                                        }
+                                    } else if (i.getKindOfDrink().equals("alcohol")) {
+                                        switch (i.getNameOfDrink()) {
+                                            case "hertog_jan":
+                                                alcoholParser.addHertog_jan(i.getTotalToAdd());
+                                                break;
+                                            case "jupiler":
+                                                alcoholParser.addJupiler(i.getTotalToAdd());
+                                                break;
+                                            case "liefmans":
+                                                alcoholParser.addLiefmans(i.getTotalToAdd());
+                                                break;
+                                            case "leffe_blond":
+                                                alcoholParser.addLeffe_blond(i.getTotalToAdd());
+                                                break;
+                                            case "palm":
+                                                alcoholParser.addPalm(i.getTotalToAdd());
+                                                break;
+                                            case "hoegaarde":
+                                                alcoholParser.addHoegaarde(i.getTotalToAdd());
+                                                break;
+                                            case "witte_wijn":
+                                                alcoholParser.addWitte_wijn(i.getTotalToAdd());
+                                                break;
+                                            case "rode_wijn":
+                                                alcoholParser.addRode_wijn(i.getTotalToAdd());
+                                                break;
+                                            case "bacardi":
+                                                alcoholParser.addBacardi(i.getTotalToAdd());
+                                                break;
+                                            case "bacardi_razz":
+                                                alcoholParser.addBacardi_razz(i.getTotalToAdd());
+                                        }
+                                    }
+                                }
+
+                                try {
+                                    System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
+                                    System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
+                                    getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
+                                    getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                items.clear();
+                                empyBackupArray();
+                                isDone = true;
+                            }
+                        }
+                    } else {
+                        for (InvItem i : items) {
+                            if (i.getKindOfDrink().equals("cold_drink")) {
+                                switch (i.getNameOfDrink()) {
+                                    case "cola":
+                                        coldDrinksParser.addCola(i.getTotalToAdd());
+                                        break;
+                                    case "cola_zero":
+                                        coldDrinksParser.addCola_zero(i.getTotalToAdd());
+                                        break;
+                                    case "sprite":
+                                        coldDrinksParser.addSprite(i.getTotalToAdd());
+                                        break;
+                                    case "fanta":
+                                        coldDrinksParser.addFanta(i.getTotalToAdd());
+                                        break;
+                                    case "cassis":
+                                        coldDrinksParser.addCassis(i.getTotalToAdd());
+                                        break;
+                                    case "redbull":
+                                        coldDrinksParser.addRedbull(i.getTotalToAdd());
+                                        break;
+                                    case "fuze_green":
+                                        coldDrinksParser.addFuze_green(i.getTotalToAdd());
+                                        break;
+                                    case "fuze_sparkling":
+                                        coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
+                                        break;
+                                    case "fuze_blacktea":
+                                        coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
+                                        break;
+                                    case "o2_geel":
+                                        coldDrinksParser.addO2_geel(i.getTotalToAdd());
+                                        break;
+                                    case "o2_rood":
+                                        coldDrinksParser.addO2_rood(i.getTotalToAdd());
+                                        break;
+                                    case "o2_groen":
+                                        coldDrinksParser.addO2_groen(i.getTotalToAdd());
+                                        break;
+                                    case "fristi":
+                                        coldDrinksParser.addFristi(i.getTotalToAdd());
+                                        break;
+                                    case "chocomel":
+                                        coldDrinksParser.addChocomel(i.getTotalToAdd());
+                                        break;
+                                    case "spa_rood":
+                                        coldDrinksParser.addSpa_rood(i.getTotalToAdd());
+                                        break;
+                                }
+                            } else if (i.getKindOfDrink().equals("alcohol")) {
+                                switch (i.getNameOfDrink()) {
+                                    case "hertog_jan":
+                                        alcoholParser.addHertog_jan(i.getTotalToAdd());
+                                        break;
+                                    case "jupiler":
+                                        alcoholParser.addJupiler(i.getTotalToAdd());
+                                        break;
+                                    case "liefmans":
+                                        alcoholParser.addLiefmans(i.getTotalToAdd());
+                                        break;
+                                    case "leffe_blond":
+                                        alcoholParser.addLeffe_blond(i.getTotalToAdd());
+                                        break;
+                                    case "palm":
+                                        alcoholParser.addPalm(i.getTotalToAdd());
+                                        break;
+                                    case "hoegaarde":
+                                        alcoholParser.addHoegaarde(i.getTotalToAdd());
+                                        break;
+                                    case "witte_wijn":
+                                        alcoholParser.addWitte_wijn(i.getTotalToAdd());
+                                        break;
+                                    case "rode_wijn":
+                                        alcoholParser.addRode_wijn(i.getTotalToAdd());
+                                        break;
+                                    case "bacardi":
+                                        alcoholParser.addBacardi(i.getTotalToAdd());
+                                        break;
+                                    case "bacardi_razz":
+                                        alcoholParser.addBacardi_razz(i.getTotalToAdd());
+                                }
+                            }
+                        }
+
+                        try {
+                            System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
+                            System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
+                            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
+                            getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        items.clear();
+                        empyBackupArray();
+                    }
+                }
+            }).start();
+        }finally {
+            invAdapter.update(items);
+            invAdapter.notifyDataSetChanged();
+        }*/
+
     }
 
     public void backupArray(){
@@ -540,6 +875,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void clearArray(){
         empyBackupArray();
         this.items.clear();
+        invAdapter.update(items);
+        invAdapter.notifyDataSetChanged();
+    }
+
+    public void updateArrayView(){
         invAdapter.update(items);
         invAdapter.notifyDataSetChanged();
     }
