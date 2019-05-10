@@ -34,6 +34,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
+import virgo.larsverhulst.nl.virgoinventaristool.Util.RandomString;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
@@ -51,12 +52,14 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
     public JsonColdDrinksParser(Context context) {
         this.context = context;
         editor = this.context.getSharedPreferences("cold_drinks", Context.MODE_PRIVATE).edit();
+        editor.apply();
         prefs = this.context.getSharedPreferences("cold_drinks", Context.MODE_PRIVATE);
         sprefs = this.context.getSharedPreferences("settings" , Context.MODE_PRIVATE);
     }
 
     public JsonColdDrinksParser(Context context, int cola, int cola_zero, int sprite, int fuze_green, int fuze_sparkling, int fuze_blacktea, int fanta, int cassis, int o2_geel, int o2_rood, int o2_groen, int redbull, int fristi, int chocomel, int spa_rood) {
         editor = this.context.getSharedPreferences("cold_drinks", Context.MODE_PRIVATE).edit();
+        editor.apply();
         prefs = this.context.getSharedPreferences("cold_drinks", Context.MODE_PRIVATE);
 
         this.context = context;
@@ -77,7 +80,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
         editor.putInt("chocomel", chocomel);
         editor.putInt("spa_rood", spa_rood);
 
-        editor.commit();
+        editor.apply();
     }
 
     public boolean isDone() {
@@ -104,7 +107,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setCola(int cola) {
         editor.putInt("cola", cola);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -114,7 +117,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addCola(int amount) {
         editor.putInt("cola", (prefs.getInt("cola", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -127,7 +130,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
         int newDrink = oldDrink - amount;
         if (newDrink >= 0) {
             editor.putInt("cola", newDrink);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -147,7 +150,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setCola_zero(int cola_zero) {
         editor.putInt("cola_zero", cola_zero);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -157,7 +160,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addCola_zero(int amount) {
         editor.putInt("cola_zero", (prefs.getInt("cola_zero", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -172,7 +175,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("cola_zero", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -191,7 +194,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setSprite(int sprite) {
         editor.putInt("sprite", sprite);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -201,7 +204,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addSprite(int amount) {
         editor.putInt("sprite", (prefs.getInt("sprite", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -216,7 +219,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("sprite", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -235,7 +238,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setFuze_green(int fuze_green) {
         editor.putInt("fuze_green", fuze_green);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -245,7 +248,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addFuze_green(int amount) {
         editor.putInt("fuze_green", (prefs.getInt("fuze_green", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -260,7 +263,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("fuze_green", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -279,7 +282,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setFuze_sparkling(int fuze_sparkling) {
         editor.putInt("fuze_sparkling", fuze_sparkling);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -289,7 +292,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addFuze_sparkling(int amount) {
         editor.putInt("fuze_sparkling", (prefs.getInt("fuze_sparkling", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -304,7 +307,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("fuze_sparkling", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -323,7 +326,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setFuze_blacktea(int fuze_blacktea) {
         editor.putInt("fuze_blacktea", fuze_blacktea);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -333,7 +336,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addFuze_blacktea(int amount) {
         editor.putInt("fuze_blacktea", (prefs.getInt("fuze_blacktea", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -348,7 +351,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("fuze_blacktea", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -368,7 +371,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setFanta(int fanta) {
         editor.putInt("fanta", fanta);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -378,7 +381,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addFanta(int amount) {
         editor.putInt("fanta", (prefs.getInt("fanta", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -393,7 +396,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("fanta", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -412,7 +415,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setCassis(int cassis) {
         editor.putInt("cassis", cassis);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -422,7 +425,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addCassis(int amount) {
         editor.putInt("cassis", (prefs.getInt("cassis", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -437,7 +440,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("cassis", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -456,7 +459,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setO2_geel(int o2_geel) {
         editor.putInt("o2_geel", o2_geel);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -466,7 +469,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addO2_geel(int amount) {
         editor.putInt("o2_geel", (prefs.getInt("o2_geel", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -481,7 +484,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("o2_geel", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -501,7 +504,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setO2_rood(int o2_rood) {
         editor.putInt("o2_rood", o2_rood);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -511,7 +514,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addO2_rood(int amount) {
         editor.putInt("o2_rood", (prefs.getInt("o2_rood", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -526,7 +529,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("o2_rood", newDrink);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -545,7 +548,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setO2_groen(int o2_groen) {
         editor.putInt("o2_groen", o2_groen);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -555,7 +558,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addO2_groen(int amount) {
         editor.putInt("o2_groen", (prefs.getInt("o2_groen", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -570,7 +573,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("o2_groen", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -590,7 +593,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setRedbull(int redbull) {
         editor.putInt("redbull", redbull);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -600,7 +603,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addRedbull(int amount) {
         editor.putInt("redbull", (prefs.getInt("redbull", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -615,7 +618,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("redbull", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -635,7 +638,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setFrist(int fristi) {
         editor.putInt("fristi", fristi);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -645,7 +648,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addFristi(int amount) {
         editor.putInt("fristi", (prefs.getInt("fristi", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -660,7 +663,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("fristi", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -680,7 +683,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setChocomel(int chocomel) {
         editor.putInt("chocomel", chocomel);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -690,7 +693,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addChocomel(int amount) {
         editor.putInt("chocomel", (prefs.getInt("chocomel", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -705,7 +708,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("chocomel", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -725,7 +728,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void setSpa_rood(int spa_rood) {
         editor.putInt("spa_rood", spa_rood);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -735,7 +738,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      */
     public void addSpa_rood(int amount) {
         editor.putInt("spa_rood", (prefs.getInt("spa_rood", 0) + amount));
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -750,7 +753,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             newDrink = 0;
         }
         editor.putInt("spa_rood", newDrink);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -797,7 +800,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
     public int getLatestDrinks() throws JSONException {
         int succes = 0;
 
-        this.execute(sprefs.getString("ip" , "0.0.0.0") + sprefs.getString("port", "0") +"/getlatestcolddrinks/");
+        this.execute(sprefs.getString("ip" , "0.0.0.0") + sprefs.getString("port", "0") +"/getlatestcolddrinks");
         if (this.getStatus() == Status.FINISHED) {
             succes = 1;
         }
@@ -822,6 +825,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             System.out.println(url);
 
             URLConnection connection = url.openConnection();
+            connection.setUseCaches(false);
 
             reader = new BufferedReader((new InputStreamReader(connection.getInputStream())));
             response = reader.readLine().toString();
@@ -843,6 +847,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
                 }
             }
         }
+        System.out.println("response: " + response);
         return response;
     }
 
@@ -851,12 +856,12 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
     }
 
     protected void onPostExecute(String response) {
-        System.out.println("OnpostExecute started!");
-        if (response != null) {
+        System.out.println("OnpostExecute started! Response: " + response);
+        if (response != null && !response.equals("")) {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 System.out.println("Out Response: " + jsonArray);
-
+                System.out.println("Json Lenth: " + jsonArray.length());
                 if(jsonArray.length() != 0) {
                     JSONObject drinks = jsonArray.getJSONObject(0);
 
@@ -875,6 +880,8 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
                     setFrist(drinks.getInt("fristi"));
                     setChocomel(drinks.getInt("chocomel"));
                     setSpa_rood(drinks.getInt("spa_rood"));
+
+                    editor.apply();
                 }else{
                     setCola(0);
                     setCola_zero(0);
@@ -891,6 +898,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
                     setFrist(0);
                     setChocomel(0);
                     setSpa_rood(0);
+                    editor.apply();
                 }
 
                 done = true;
@@ -898,6 +906,24 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else{
+            setCola(0);
+            setCola_zero(0);
+            setSprite(0);
+            setFuze_green(0);
+            setFuze_sparkling(0);
+            setFuze_blacktea(0);
+            setFanta(0);
+            setCassis(0);
+            setO2_geel(0);
+            setO2_rood(0);
+            setO2_groen(0);
+            setRedbull(0);
+            setFrist(0);
+            setChocomel(0);
+            setSpa_rood(0);
+            editor.apply();
         }
+        done = true;
     }
 }

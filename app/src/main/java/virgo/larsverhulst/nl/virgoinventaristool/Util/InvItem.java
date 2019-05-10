@@ -49,7 +49,13 @@ public class InvItem implements Serializable {
 
     public int getTotalToAdd(){
         int total = 0;
-        total = ((crates*24)+bottles);
+        if(nameOfDrink.contains("o2")){
+            total = ((crates*6)+bottles);
+        }else if((nameOfDrink.contains("bacardi")) || (nameOfDrink.contains("wijn"))){
+            total = ((crates * 12) + bottles);
+        }else{
+            total = ((crates*24)+bottles);
+        }
         return  total;
     }
 }
