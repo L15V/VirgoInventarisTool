@@ -186,7 +186,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mainScreen_splitter2" />
 
     <ImageButton
-        android:id="@+id/mainScreen_fullscreen"
+        android:id="@+id/mainScreen_SyncToken"
         android:layout_width="45dp"
         android:layout_height="0dp"
         android:layout_marginStart="4dp"
@@ -196,7 +196,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/mainScreen_clothesButton"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_settings"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_fullscreem" />
+        app:srcCompat="@android:drawable/ic_popup_sync" />
 
     <ImageButton
         android:id="@+id/mainScreen_settings"
@@ -233,7 +233,7 @@
         android:layout_marginBottom="2dp"
         android:backgroundTint="@color/VirgoBlue"
         app:layout_constraintBottom_toTopOf="@+id/mainScreen_splitter2"
-        app:layout_constraintStart_toEndOf="@+id/mainScreen_fullscreen"
+        app:layout_constraintStart_toEndOf="@+id/mainScreen_SyncToken"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_notification_clear_all" />
 
