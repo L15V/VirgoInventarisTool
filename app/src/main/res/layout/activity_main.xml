@@ -14,11 +14,14 @@
         android:id="@+id/mainScreen_currentItems"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clickable="true"
+        android:clipToPadding="false"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/mainScreen_inButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mainScreen_splitter"
-        app:layout_constraintTop_toBottomOf="@+id/mainScreen_splitter2" />
+        app:layout_constraintTop_toBottomOf="@+id/mainScreen_splitter2"
+        tools:clickable="true" />
 
     <!--
         # splitters for make a line between elements

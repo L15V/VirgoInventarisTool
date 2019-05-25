@@ -26,6 +26,8 @@
     <string name="currentSettings">current settings</string>
     <string name="wrongArgument">wrong arguments</string>
     <string name="nAllowedValue">not allowed value</string>
+    <string name="remove">remove</string>
+    <string name="change">change</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
