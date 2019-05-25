@@ -763,8 +763,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
      * @return JSONArray for the nodeJS REST api
      * @throws JSONException
      */
-    public JSONArray getColdDrinksJSON() throws JSONException {
-        JSONArray drinks = new JSONArray();
+    public JSONObject getColdDrinksJSON() throws JSONException {
         JSONObject obDrinks = new JSONObject();
 
         obDrinks.put("cola", getCola());
@@ -785,10 +784,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
 
         System.out.println("Cola for json: " + prefs.getInt("cola", 0));
 
-
-        drinks.put(obDrinks);
-
-        return drinks;
+        return obDrinks;
     }
 
     /**
@@ -800,7 +796,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
     public int getLatestDrinks() throws JSONException {
         int succes = 0;
 
-        this.execute(sprefs.getString("ip" , "0.0.0.0") + sprefs.getString("port", "0") +"/getlatestcolddrinks");
+        this.execute(sprefs.getString("ip" , "0.0.0.0") + sprefs.getString("port", "0") +"/api/getlatestcolddrinks");
         if (this.getStatus() == Status.FINISHED) {
             succes = 1;
         }

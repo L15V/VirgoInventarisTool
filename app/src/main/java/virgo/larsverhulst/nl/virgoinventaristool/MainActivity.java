@@ -20,7 +20,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -29,9 +28,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +43,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +59,7 @@ import virgo.larsverhulst.nl.virgoinventaristool.Util.LocaleHelper;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
+    private static final String TAGTOKEN = "Token tag";
 
     private RequestQueue requestQueue;
 
@@ -68,6 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
+
+    private Date lastChecked = null;
+
+    private String responseMessage;
 
 
     /**
@@ -86,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton languageButton;
     private ImageButton settingsButton;
     private ImageButton clearButton;
-
+    private ImageButton syncTokenButton;
     /**
      * attribte for the buttons to add or remove stuff
      */
@@ -152,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //show the activity in full screen
 
+        CheckToken(false);
 
         /**
          * Assignments to the layout items
@@ -159,9 +167,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         languageButton = findViewById(R.id.mainScreen_languageButton);
         settingsButton = findViewById(R.id.mainScreen_settings);
         clearButton = findViewById(R.id.mainScreen_clearButton);
+        syncTokenButton = findViewById(R.id.mainScreen_SyncToken);
         languageButton.setOnClickListener(this);
         settingsButton.setOnClickListener(this);
         clearButton.setOnClickListener(this);
+        syncTokenButton.setOnClickListener(this);
 
         inButton = findViewById(R.id.mainScreen_inButton);
         inButton.setOnClickListener(this);
@@ -240,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.mainScreen_inButton:
+                CheckToken(false);
                 addItemsInDb();
                 break;
             case R.id.mainScreen_languageButton:
@@ -253,7 +264,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.mainScreen_clearButton:
                 clearArray();
                 break;
+            case R.id.mainScreen_SyncToken:
+                CheckToken(true);
+                break;
         }
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
     }
 
     public boolean isDone() {
@@ -309,17 +331,84 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void getJsonResponsePost(JSONArray array, String url) {
+    public void Toast(final String toastString){
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), toastString , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getJsonResponsePost(JSONObject object, String url) {
+        System.out.println("Token: " + prefs.getString("token" , "No token"));
         url = url;
 
-        JSONArray json = null;
-        json = array;
+        JSONObject json = null;
+        json = object;
         System.out.println("JSON Array: " + json);
-        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.POST, url, json, new Response.Listener<JSONArray>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(JSONObject response) {
                 Log.i(REQ_TAG, response.toString());
+                System.out.println("response: " + response);
+                try {
+                    System.out.println("response Message: " + response.getString("message"));
+                     final String responseString = response.getString("message");
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), responseString , Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(REQ_TAG, "ERROR GETTING RESPONSE");
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", "My useragent");
+                headers.put("Cache-Control", "no-cache");
+                headers.put("access-token", prefs.getString("token" , ""));
+                return headers;
+            }
+        };
+        jsonObjectRequest.setTag(REQ_TAG);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void getTokenJsonResponsePost(JSONObject object, String url) {
+        url = url;
+
+        JSONObject json = null;
+        json = object;
+        System.out.println("JSON Array: " + json);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String message =  response.getString("message");
+                    long expireTime = response.getLong("exp");
+                    String token = response.getString("token");
+
+                    editor.putLong("expireTime", expireTime);
+                    editor.putString("token" , token);
+                    editor.apply();
+
+                    System.out.println("mes: " + message + " Exp: " + expireTime + " token: " + token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -477,8 +566,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             try {
                                 System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
                                 System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
-                                getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
-                                getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
+                                getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertcolddrinks/");
+                                getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertalcohol/");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -575,8 +664,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     try {
                         System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
                         System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
-                        getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
-                        getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
+                        getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertcolddrinks/");
+                        getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertalcohol/");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -593,223 +682,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
-
-
-
-
-
-/*
-
-
-        try {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
-                    if (!alcoholParser.isDone() && !coldDrinksParser.isDone()) {
-                        isDone = false;
-                        while (!isDone) {
-                            System.out.println("Loop: alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
-                            if (alcoholParser.isDone() && coldDrinksParser.isDone()) {
-                                for (InvItem i : items) {
-                                    if (i.getKindOfDrink().equals("cold_drink")) {
-                                        switch (i.getNameOfDrink()) {
-                                            case "cola":
-                                                coldDrinksParser.addCola(i.getTotalToAdd());
-                                                break;
-                                            case "cola_zero":
-                                                coldDrinksParser.addCola_zero(i.getTotalToAdd());
-                                                break;
-                                            case "sprite":
-                                                coldDrinksParser.addSprite(i.getTotalToAdd());
-                                                break;
-                                            case "fanta":
-                                                coldDrinksParser.addFanta(i.getTotalToAdd());
-                                                break;
-                                            case "cassis":
-                                                coldDrinksParser.addCassis(i.getTotalToAdd());
-                                                break;
-                                            case "redbull":
-                                                coldDrinksParser.addRedbull(i.getTotalToAdd());
-                                                break;
-                                            case "fuze_green":
-                                                coldDrinksParser.addFuze_green(i.getTotalToAdd());
-                                                break;
-                                            case "fuze_sparkling":
-                                                coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
-                                                break;
-                                            case "fuze_blacktea":
-                                                coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
-                                                break;
-                                            case "o2_geel":
-                                                coldDrinksParser.addO2_geel(i.getTotalToAdd());
-                                                break;
-                                            case "o2_rood":
-                                                coldDrinksParser.addO2_rood(i.getTotalToAdd());
-                                                break;
-                                            case "o2_groen":
-                                                coldDrinksParser.addO2_groen(i.getTotalToAdd());
-                                                break;
-                                            case "fristi":
-                                                coldDrinksParser.addFristi(i.getTotalToAdd());
-                                                break;
-                                            case "chocomel":
-                                                coldDrinksParser.addChocomel(i.getTotalToAdd());
-                                                break;
-                                            case "spa_rood":
-                                                coldDrinksParser.addSpa_rood(i.getTotalToAdd());
-                                                break;
-                                        }
-                                    } else if (i.getKindOfDrink().equals("alcohol")) {
-                                        switch (i.getNameOfDrink()) {
-                                            case "hertog_jan":
-                                                alcoholParser.addHertog_jan(i.getTotalToAdd());
-                                                break;
-                                            case "jupiler":
-                                                alcoholParser.addJupiler(i.getTotalToAdd());
-                                                break;
-                                            case "liefmans":
-                                                alcoholParser.addLiefmans(i.getTotalToAdd());
-                                                break;
-                                            case "leffe_blond":
-                                                alcoholParser.addLeffe_blond(i.getTotalToAdd());
-                                                break;
-                                            case "palm":
-                                                alcoholParser.addPalm(i.getTotalToAdd());
-                                                break;
-                                            case "hoegaarde":
-                                                alcoholParser.addHoegaarde(i.getTotalToAdd());
-                                                break;
-                                            case "witte_wijn":
-                                                alcoholParser.addWitte_wijn(i.getTotalToAdd());
-                                                break;
-                                            case "rode_wijn":
-                                                alcoholParser.addRode_wijn(i.getTotalToAdd());
-                                                break;
-                                            case "bacardi":
-                                                alcoholParser.addBacardi(i.getTotalToAdd());
-                                                break;
-                                            case "bacardi_razz":
-                                                alcoholParser.addBacardi_razz(i.getTotalToAdd());
-                                        }
-                                    }
-                                }
-
-                                try {
-                                    System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
-                                    System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
-                                    getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
-                                    getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                items.clear();
-                                empyBackupArray();
-                                isDone = true;
-                            }
-                        }
-                    } else {
-                        for (InvItem i : items) {
-                            if (i.getKindOfDrink().equals("cold_drink")) {
-                                switch (i.getNameOfDrink()) {
-                                    case "cola":
-                                        coldDrinksParser.addCola(i.getTotalToAdd());
-                                        break;
-                                    case "cola_zero":
-                                        coldDrinksParser.addCola_zero(i.getTotalToAdd());
-                                        break;
-                                    case "sprite":
-                                        coldDrinksParser.addSprite(i.getTotalToAdd());
-                                        break;
-                                    case "fanta":
-                                        coldDrinksParser.addFanta(i.getTotalToAdd());
-                                        break;
-                                    case "cassis":
-                                        coldDrinksParser.addCassis(i.getTotalToAdd());
-                                        break;
-                                    case "redbull":
-                                        coldDrinksParser.addRedbull(i.getTotalToAdd());
-                                        break;
-                                    case "fuze_green":
-                                        coldDrinksParser.addFuze_green(i.getTotalToAdd());
-                                        break;
-                                    case "fuze_sparkling":
-                                        coldDrinksParser.addFuze_sparkling(i.getTotalToAdd());
-                                        break;
-                                    case "fuze_blacktea":
-                                        coldDrinksParser.addFuze_blacktea(i.getTotalToAdd());
-                                        break;
-                                    case "o2_geel":
-                                        coldDrinksParser.addO2_geel(i.getTotalToAdd());
-                                        break;
-                                    case "o2_rood":
-                                        coldDrinksParser.addO2_rood(i.getTotalToAdd());
-                                        break;
-                                    case "o2_groen":
-                                        coldDrinksParser.addO2_groen(i.getTotalToAdd());
-                                        break;
-                                    case "fristi":
-                                        coldDrinksParser.addFristi(i.getTotalToAdd());
-                                        break;
-                                    case "chocomel":
-                                        coldDrinksParser.addChocomel(i.getTotalToAdd());
-                                        break;
-                                    case "spa_rood":
-                                        coldDrinksParser.addSpa_rood(i.getTotalToAdd());
-                                        break;
-                                }
-                            } else if (i.getKindOfDrink().equals("alcohol")) {
-                                switch (i.getNameOfDrink()) {
-                                    case "hertog_jan":
-                                        alcoholParser.addHertog_jan(i.getTotalToAdd());
-                                        break;
-                                    case "jupiler":
-                                        alcoholParser.addJupiler(i.getTotalToAdd());
-                                        break;
-                                    case "liefmans":
-                                        alcoholParser.addLiefmans(i.getTotalToAdd());
-                                        break;
-                                    case "leffe_blond":
-                                        alcoholParser.addLeffe_blond(i.getTotalToAdd());
-                                        break;
-                                    case "palm":
-                                        alcoholParser.addPalm(i.getTotalToAdd());
-                                        break;
-                                    case "hoegaarde":
-                                        alcoholParser.addHoegaarde(i.getTotalToAdd());
-                                        break;
-                                    case "witte_wijn":
-                                        alcoholParser.addWitte_wijn(i.getTotalToAdd());
-                                        break;
-                                    case "rode_wijn":
-                                        alcoholParser.addRode_wijn(i.getTotalToAdd());
-                                        break;
-                                    case "bacardi":
-                                        alcoholParser.addBacardi(i.getTotalToAdd());
-                                        break;
-                                    case "bacardi_razz":
-                                        alcoholParser.addBacardi_razz(i.getTotalToAdd());
-                                }
-                            }
-                        }
-
-                        try {
-                            System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
-                            System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
-                            getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertcolddrinks/");
-                            getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/insertalcohol/");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        items.clear();
-                        empyBackupArray();
-                    }
-                }
-            }).start();
-        }finally {
-            invAdapter.update(items);
-            invAdapter.notifyDataSetChanged();
-        }*/
 
     }
 
@@ -882,5 +754,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void updateArrayView(){
         invAdapter.update(items);
         invAdapter.notifyDataSetChanged();
+    }
+
+    public void CheckToken(boolean forced){
+        System.out.println("Check token started");
+        Long currentUnixTime = new Date().getTime()/1000;
+
+        Long expireTime = prefs.getLong("expireTime" , 0);
+
+        JSONObject ob = new JSONObject();
+        try {
+            ob.put("username" , "Inv_Virgo_admin");
+            ob.put("password" , "!1974Sv-Virgo4817@");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //GetTokenClass tokenClass = new GetTokenClass(ob);
+        if(currentUnixTime >= expireTime || forced){
+            System.out.println("start check");
+            //tokenClass.execute(prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/authenticate");
+            getTokenJsonResponsePost(ob, prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/authenticate");
+        }
     }
 }
