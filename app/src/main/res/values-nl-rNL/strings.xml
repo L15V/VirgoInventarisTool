@@ -27,4 +27,6 @@
     <string name="currentSettings">huidige instellingen</string>
     <string name="wrongArgument">geen geldige input</string>
     <string name="nAllowedValue">niet toegestaande waarde</string>
+    <string name="remove">verwijderen</string>
+    <string name="change">aanpassen</string>
 </resources>

@@ -50,6 +50,7 @@ import java.util.Map;
 
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.InvItemRViewAdapter;
 import virgo.larsverhulst.nl.virgoinventaristool.Adapters.ScreenSlideAdapter;
+import virgo.larsverhulst.nl.virgoinventaristool.Dialogs.EditRyclerPopup;
 import virgo.larsverhulst.nl.virgoinventaristool.Dialogs.LanguagePopup;
 import virgo.larsverhulst.nl.virgoinventaristool.Dialogs.SettingsPopup;
 import virgo.larsverhulst.nl.virgoinventaristool.Parsers.JsonAlcoholParser;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Date lastChecked = null;
 
     private String responseMessage;
+
 
 
     /**
@@ -196,13 +198,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigationButtons.get(i).setOnClickListener(this);
         }
 
-        invAdapter = new InvItemRViewAdapter(getApplication());
+        invAdapter = new InvItemRViewAdapter(getApplication(), this, this);
         invLayoutManager = new LinearLayoutManager(getApplicationContext());
         currentItemsView = findViewById(R.id.mainScreen_currentItems);
 
         currentItemsView.setHasFixedSize(false);
         currentItemsView.setLayoutManager(invLayoutManager);
         currentItemsView.setAdapter(invAdapter);
+
 
         viewPager = findViewById(R.id.mainScreen_viewPager);
         viewPager.setAdapter(new ScreenSlideAdapter(getSupportFragmentManager()));
@@ -337,14 +340,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void Toast(final String toastString){
-        runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getApplicationContext(), toastString , Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     public void getJsonResponsePost(JSONObject object, String url) {
         System.out.println("Token: " + prefs.getString("token" , "No token"));
         url = url;
@@ -440,8 +435,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return items;
     }
 
+    public InvItem getItem(int pos){
+        return  items.get(pos);
+    }
+
     public void setItems(List<InvItem> items) {
         this.items = items;
+        invAdapter.update(items);
+        invAdapter.notifyDataSetChanged();
+        backupArray();
+    }
+
+    public void removeItem(int index){
+        items.remove(index);
+        invAdapter.update(items);
+        invAdapter.notifyDataSetChanged();
+        backupArray();
     }
 
     /**
@@ -479,6 +488,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         items.get(index).setCrates(crates);
         items.get(index).setBottles(bottles);
+
+        invAdapter.update(items);
+        invAdapter.notifyDataSetChanged();
+        backupArray();
     }
 
     public void addItemsInDb() {
