@@ -185,7 +185,7 @@
         app:layout_constraintStart_toEndOf="@+id/mainScreen_inButton" />
 
     <ImageButton
-        android:id="@+id/mainScreen_fullscreen"
+        android:id="@+id/mainScreen_SyncToken"
         android:layout_width="45dp"
         android:layout_height="0dp"
         android:layout_marginStart="4dp"
@@ -233,7 +233,7 @@
         android:layout_marginBottom="8dp"
         android:background="@color/VirgoBlue"
         app:layout_constraintBottom_toBottomOf="@+id/mainScreen_otherButton"
-        app:layout_constraintStart_toEndOf="@+id/mainScreen_fullscreen"
+        app:layout_constraintStart_toEndOf="@+id/mainScreen_SyncToken"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_notification_clear_all" />
 
