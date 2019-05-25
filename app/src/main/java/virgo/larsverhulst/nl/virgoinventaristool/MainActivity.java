@@ -174,7 +174,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         syncTokenButton.setOnClickListener(this);
 
         inButton = findViewById(R.id.mainScreen_inButton);
+        outButton = findViewById(R.id.mainScreen_outButton);
         inButton.setOnClickListener(this);
+        outButton.setOnClickListener(this);
 
         coldDrinkButton = findViewById(R.id.mainScreen_coldDrinkButton);
         alcoholButton = findViewById(R.id.mainScreen_alcoholButton);
@@ -252,6 +254,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.mainScreen_inButton:
                 CheckToken(false);
                 addItemsInDb();
+                break;
+            case R.id.mainScreen_outButton:
+                CheckToken(false);
+                subtractItemsInDb();
                 break;
             case R.id.mainScreen_languageButton:
                 LanguagePopup lp = new LanguagePopup(this, this);
@@ -353,12 +359,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("response: " + response);
                 try {
                     System.out.println("response Message: " + response.getString("message"));
-                     final String responseString = response.getString("message");
+                    final String responseString = response.getString("message");
                     runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(getApplicationContext(), responseString , Toast.LENGTH_LONG).show();
                         }
                     });
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -442,10 +449,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param item - InvItem item to add
      */
     public void addItemtoList(InvItem item) {
-        items.add(item);
+        boolean exist = false;
+        for(InvItem i : items){
+            if(i.getNameOfDrink().equals(item.getNameOfDrink())){
+                i.setBottles(i.getBottles() + item.getBottles());
+                i.setCrates(i.getCrates() + item.getCrates());
+
+                exist = true;
+            }
+        }
+        if(!exist){
+            items.add(item);
+        }
+
         invAdapter.update(items);
         invAdapter.notifyDataSetChanged();
         backupArray();
+
     }
 
     /**
@@ -657,6 +677,230 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     break;
                                 case "bacardi_razz":
                                     alcoholParser.addBacardi_razz(i.getTotalToAdd());
+                            }
+                        }
+                    }
+
+                    try {
+                        System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
+                        System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
+                        getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertcolddrinks/");
+                        getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertalcohol/");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    items.clear();
+                    empyBackupArray();
+                }
+
+                return "";
+            }
+            @Override protected void onPostExecute(String result) {
+                updateArrayView();
+            }
+        }
+
+        MyAsyncTask task = new MyAsyncTask();
+        task.execute();
+
+    }
+
+    public void subtractItemsInDb() {
+        final JsonAlcoholParser alcoholParser = new JsonAlcoholParser(this);
+        final JsonColdDrinksParser coldDrinksParser = new JsonColdDrinksParser(this);
+        try {
+            coldDrinksParser.getLatestDrinks();
+            alcoholParser.getLatestDrinks();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        class MyAsyncTask extends AsyncTask<Void, Void, String> {
+            @Override protected String doInBackground(Void... params) {
+                System.out.println("alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
+                if (!alcoholParser.isDone() && !coldDrinksParser.isDone()) {
+                    isDone = false;
+                    while (!isDone) {
+                        System.out.println("Loop: alcohol done: " + alcoholParser.isDone() + " cold done: " + coldDrinksParser.isDone());
+                        if (alcoholParser.isDone() && coldDrinksParser.isDone()) {
+                            for (InvItem i : items) {
+                                if (i.getKindOfDrink().equals("cold_drink")) {
+                                    switch (i.getNameOfDrink()) {
+                                        case "cola":
+                                            coldDrinksParser.subtractCola(i.getTotalToAdd());
+                                            break;
+                                        case "cola_zero":
+                                            coldDrinksParser.subtractCola_zero(i.getTotalToAdd());
+                                            break;
+                                        case "sprite":
+                                            coldDrinksParser.subtractSprite(i.getTotalToAdd());
+                                            break;
+                                        case "fanta":
+                                            coldDrinksParser.subtractFanta(i.getTotalToAdd());
+                                            break;
+                                        case "cassis":
+                                            coldDrinksParser.subtractCassis(i.getTotalToAdd());
+                                            break;
+                                        case "redbull":
+                                            coldDrinksParser.subtractRedbull(i.getTotalToAdd());
+                                            break;
+                                        case "fuze_green":
+                                            coldDrinksParser.subtractFuze_green(i.getTotalToAdd());
+                                            break;
+                                        case "fuze_sparkling":
+                                            coldDrinksParser.subtractFuze_sparkling(i.getTotalToAdd());
+                                            break;
+                                        case "fuze_blacktea":
+                                            coldDrinksParser.subtractFuze_blacktea(i.getTotalToAdd());
+                                            break;
+                                        case "o2_geel":
+                                            coldDrinksParser.subtractO2_geel(i.getTotalToAdd());
+                                            break;
+                                        case "o2_rood":
+                                            coldDrinksParser.subtractO2_rood(i.getTotalToAdd());
+                                            break;
+                                        case "o2_groen":
+                                            coldDrinksParser.subtractO2_groen(i.getTotalToAdd());
+                                            break;
+                                        case "fristi":
+                                            coldDrinksParser.subtractFristi(i.getTotalToAdd());
+                                            break;
+                                        case "chocomel":
+                                            coldDrinksParser.subtractChocomel(i.getTotalToAdd());
+                                            break;
+                                        case "spa_rood":
+                                            coldDrinksParser.subtractSpa_rood(i.getTotalToAdd());
+                                            break;
+                                    }
+                                } else if (i.getKindOfDrink().equals("alcohol")) {
+                                    switch (i.getNameOfDrink()) {
+                                        case "hertog_jan":
+                                            alcoholParser.subtractHertog_jan(i.getTotalToAdd());
+                                            break;
+                                        case "jupiler":
+                                            alcoholParser.subtractJupiler(i.getTotalToAdd());
+                                            break;
+                                        case "liefmans":
+                                            alcoholParser.subtractLiefmans(i.getTotalToAdd());
+                                            break;
+                                        case "leffe_blond":
+                                            alcoholParser.subtractLeffe_blond(i.getTotalToAdd());
+                                            break;
+                                        case "palm":
+                                            alcoholParser.subtractPalm(i.getTotalToAdd());
+                                            break;
+                                        case "hoegaarde":
+                                            alcoholParser.subtractHoegaarde(i.getTotalToAdd());
+                                            break;
+                                        case "witte_wijn":
+                                            alcoholParser.subtractWitte_wijn(i.getTotalToAdd());
+                                            break;
+                                        case "rode_wijn":
+                                            alcoholParser.subtractRode_wijn(i.getTotalToAdd());
+                                            break;
+                                        case "bacardi":
+                                            alcoholParser.subtractBacardi(i.getTotalToAdd());
+                                            break;
+                                        case "bacardi_razz":
+                                            alcoholParser.subtractBacardi_razz(i.getTotalToAdd());
+                                    }
+                                }
+                            }
+
+                            try {
+                                System.out.println("colddrink json mainActivity: " + coldDrinksParser.getColdDrinksJSON());
+                                System.out.println("alcohol json mainActivity: " + alcoholParser.getAlcoholJSON());
+                                getJsonResponsePost(coldDrinksParser.getColdDrinksJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertcolddrinks/");
+                                getJsonResponsePost(alcoholParser.getAlcoholJSON(), prefs.getString("ip", "0.0.0.0") + prefs.getString("port", "0") + "/api/insertalcohol/");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            items.clear();
+                            empyBackupArray();
+                            isDone = true;
+                        }
+                    }
+                } else {
+                    for (InvItem i : items) {
+                        if (i.getKindOfDrink().equals("cold_drink")) {
+                            switch (i.getNameOfDrink()) {
+                                case "cola":
+                                    coldDrinksParser.subtractCola(i.getTotalToAdd());
+                                    break;
+                                case "cola_zero":
+                                    coldDrinksParser.subtractCola_zero(i.getTotalToAdd());
+                                    break;
+                                case "sprite":
+                                    coldDrinksParser.subtractSprite(i.getTotalToAdd());
+                                    break;
+                                case "fanta":
+                                    coldDrinksParser.subtractFanta(i.getTotalToAdd());
+                                    break;
+                                case "cassis":
+                                    coldDrinksParser.subtractCassis(i.getTotalToAdd());
+                                    break;
+                                case "redbull":
+                                    coldDrinksParser.subtractRedbull(i.getTotalToAdd());
+                                    break;
+                                case "fuze_green":
+                                    coldDrinksParser.subtractFuze_green(i.getTotalToAdd());
+                                    break;
+                                case "fuze_sparkling":
+                                    coldDrinksParser.subtractFuze_sparkling(i.getTotalToAdd());
+                                    break;
+                                case "fuze_blacktea":
+                                    coldDrinksParser.subtractFuze_blacktea(i.getTotalToAdd());
+                                    break;
+                                case "o2_geel":
+                                    coldDrinksParser.subtractO2_geel(i.getTotalToAdd());
+                                    break;
+                                case "o2_rood":
+                                    coldDrinksParser.subtractO2_rood(i.getTotalToAdd());
+                                    break;
+                                case "o2_groen":
+                                    coldDrinksParser.subtractO2_groen(i.getTotalToAdd());
+                                    break;
+                                case "fristi":
+                                    coldDrinksParser.subtractFristi(i.getTotalToAdd());
+                                    break;
+                                case "chocomel":
+                                    coldDrinksParser.subtractChocomel(i.getTotalToAdd());
+                                    break;
+                                case "spa_rood":
+                                    coldDrinksParser.subtractSpa_rood(i.getTotalToAdd());
+                                    break;
+                            }
+                        } else if (i.getKindOfDrink().equals("alcohol")) {
+                            switch (i.getNameOfDrink()) {
+                                case "hertog_jan":
+                                    alcoholParser.subtractHertog_jan(i.getTotalToAdd());
+                                    break;
+                                case "jupiler":
+                                    alcoholParser.subtractJupiler(i.getTotalToAdd());
+                                    break;
+                                case "liefmans":
+                                    alcoholParser.subtractLiefmans(i.getTotalToAdd());
+                                    break;
+                                case "leffe_blond":
+                                    alcoholParser.subtractLeffe_blond(i.getTotalToAdd());
+                                    break;
+                                case "palm":
+                                    alcoholParser.subtractPalm(i.getTotalToAdd());
+                                    break;
+                                case "hoegaarde":
+                                    alcoholParser.subtractHoegaarde(i.getTotalToAdd());
+                                    break;
+                                case "witte_wijn":
+                                    alcoholParser.subtractWitte_wijn(i.getTotalToAdd());
+                                    break;
+                                case "rode_wijn":
+                                    alcoholParser.subtractRode_wijn(i.getTotalToAdd());
+                                    break;
+                                case "bacardi":
+                                    alcoholParser.subtractBacardi(i.getTotalToAdd());
+                                    break;
+                                case "bacardi_razz":
+                                    alcoholParser.subtractBacardi_razz(i.getTotalToAdd());
                             }
                         }
                     }
