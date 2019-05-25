@@ -1,6 +1,7 @@
 package virgo.larsverhulst.nl.virgoinventaristool.Adapters;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,11 +14,18 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import virgo.larsverhulst.nl.virgoinventaristool.Dialogs.EditRyclerPopup;
+import virgo.larsverhulst.nl.virgoinventaristool.MainActivity;
 import virgo.larsverhulst.nl.virgoinventaristool.R;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 
 public class InvItemRViewAdapter extends RecyclerView.Adapter<InvItemRViewAdapter.InvViewHolder> {
     private List<InvItem> invItems;
+
+    private MainActivity mainActivity;
+    private Context context;
+
+    private EditRyclerPopup editItemDialog;
 
     public static class InvViewHolder extends RecyclerView.ViewHolder{
         public TextView title;
@@ -29,7 +37,7 @@ public class InvItemRViewAdapter extends RecyclerView.Adapter<InvItemRViewAdapte
         public InvViewHolder(@NonNull View itemView){
             super(itemView);
 
-            this.view = itemView.findViewById(R.id.mainScreen_viewPager);
+            this.view = itemView.findViewById(R.id.CardItem);
 
             this.title = itemView.findViewById(R.id.cardView_title);
             this.amountCrates = itemView.findViewById(R.id.cardView_amountCrates);
@@ -37,8 +45,12 @@ public class InvItemRViewAdapter extends RecyclerView.Adapter<InvItemRViewAdapte
         }
     }
 
-    public InvItemRViewAdapter(Application application){
+    public InvItemRViewAdapter(Application application, MainActivity ma, Context co){
         this.invItems = new ArrayList<>();
+        this.mainActivity = ma;
+        this.context = co;
+
+        editItemDialog = new EditRyclerPopup(context, mainActivity);
     }
 
     @NonNull
@@ -50,12 +62,20 @@ public class InvItemRViewAdapter extends RecyclerView.Adapter<InvItemRViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull InvViewHolder holder, int position){
+    public void onBindViewHolder(@NonNull InvViewHolder holder, final int position){
         InvItem item = invItems.get(position);
 
         holder.title.setText(item.getNameOfDrink());
         holder.amountCrates.setText(Integer.toString(item.getCrates()));
         holder.amountBottles.setText(Integer.toString(item.getBottles()));
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editItemDialog.ShowPopup(position);
+            }
+        });
+
     }
 
     @Override
