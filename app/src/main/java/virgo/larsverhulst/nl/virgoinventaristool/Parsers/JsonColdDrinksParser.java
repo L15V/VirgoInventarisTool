@@ -878,7 +878,7 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
                     setSpa_rood(drinks.getInt("spa_rood"));
 
                     editor.apply();
-                }else{
+                }else {
                     setCola(0);
                     setCola_zero(0);
                     setSprite(0);
@@ -902,23 +902,6 @@ public class JsonColdDrinksParser extends AsyncTask<String, Void, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            setCola(0);
-            setCola_zero(0);
-            setSprite(0);
-            setFuze_green(0);
-            setFuze_sparkling(0);
-            setFuze_blacktea(0);
-            setFanta(0);
-            setCassis(0);
-            setO2_geel(0);
-            setO2_rood(0);
-            setO2_groen(0);
-            setRedbull(0);
-            setFrist(0);
-            setChocomel(0);
-            setSpa_rood(0);
-            editor.apply();
         }
         done = true;
     }

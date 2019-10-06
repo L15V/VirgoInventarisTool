@@ -659,18 +659,6 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            setHertog_jan(0);
-            setJupiler(0);
-            setLiefmans(0);
-            setLeffe_blond(0);
-            setPalm(0);
-            setHoegaarde(0);
-            setWitte_wijn(0);
-            setRode_wijn(0);
-            setBacardi(0);
-            setBacardi_razz(0);
-            editor.apply();
         }
         done = true;
     }
