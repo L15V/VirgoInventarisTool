@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +34,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import virgo.larsverhulst.nl.virgoinventaristool.R;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.InvItem;
 import virgo.larsverhulst.nl.virgoinventaristool.Util.RequestQueueSingleton;
 
@@ -659,6 +661,9 @@ public class JsonAlcoholParser extends AsyncTask<String, Void, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else{
+            Toast toast = Toast.makeText(context, context.getResources().getString(R.string.noInternet), Toast.LENGTH_SHORT);
+            toast.show();
         }
         done = true;
     }
