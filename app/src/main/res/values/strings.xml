@@ -28,6 +28,7 @@
     <string name="nAllowedValue">not allowed value</string>
     <string name="remove">remove</string>
     <string name="change">change</string>
+    <string name="noInternet">Non valid internet connection</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

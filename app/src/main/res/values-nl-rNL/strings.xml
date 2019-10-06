@@ -29,4 +29,5 @@
     <string name="nAllowedValue">niet toegestaande waarde</string>
     <string name="remove">verwijderen</string>
     <string name="change">aanpassen</string>
+    <string name="noInternet">Geen geldige internet verbinding</string>
 </resources>
